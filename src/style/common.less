@@ -1,0 +1,147 @@
+/*! oms v1.0.0  公用样式库*/
+//  @import "bootstrap/bootstrap.less";
+// @import "./iview/custom.less";
+// @import "./iconfont";
+// @import "./customIview";
+// @import "./customIviewForm";
+// @import "./customTable";
+// @import "./wrapper";
+
+body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption, {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-style: normal;
+    text-decoration: none;
+    border: none;
+    color: #333;
+    font-weight: normal;
+    font-family: "Microsoft Yahei";
+    box-sizing: border-box;
+    -webkit-tap-highlight-color:transparent;
+    -webkit-font-smoothing: antialiased;
+    &:hover{
+        outline: none;
+    }
+}
+html,body{
+    height: 100%;
+    width: 100%;
+	background-color: #F5F5F5;
+}
+*, :after, :before {
+	box-sizing: border-box;
+}
+ul, li {
+	margin: 0;
+	padding: 0;
+}
+a:hover, a:focus, a:visited {
+	text-decoration: none;
+}
+.content-area {
+	width: 1200px;
+	margin: 0 auto;
+}
+.clearfix {
+	&:after {
+		display: table;
+		content: " ";
+		clear: both;
+	}
+}
+.text-center {
+	text-align: center;
+}
+.full-width {
+	width: 100%;
+}
+// o-p10  代表padding 10px 范围1-30px
+.create-padding(@i:0) when (@i<=30) {
+	.oms-pa@{i} {
+		padding: 0px + @i;
+	}
+	.oms-pl@{i} {
+		padding-left: 0px + @i;
+	}
+	.oms-pr@{i} {
+		padding-right: 0px + @i;
+	}
+	.oms-pt@{i} {
+		padding-top: 0px + @i;
+	}
+	.oms-pb@{i} {
+		padding-bottom: 0px + @i;
+	}
+	.oms-plr@{i} {
+		padding-left: 0px + @i;
+		padding-right: 0px + @i;
+	}
+	.create-padding(@i+1);
+}
+.create-padding();
+
+.create-margin(@i:0) when (@i<=30) {
+	.oms-ma@{i} {
+		margin: 0px + @i;
+	}
+	.oms-ml@{i} {
+		margin-left: 0px + @i;
+	}
+	.oms-mr@{i} {
+		margin-right: 0px + @i;
+	}
+	.oms-mt@{i} {
+		margin-top: 0px + @i;
+	}
+	.oms-mb@{i} {
+		margin-bottom: 0px + @i;
+	}
+	.oms-mlr@{i} {
+		margin-left: 0px + @i;
+		margin-right: 0px + @i;
+	}
+	.create-margin(@i+1);
+}
+.create-margin();
+// 字体 O-FZ10
+.create-font-size(@i:12) when (@i<=30) {
+	.oms-fz@{i} {
+		font-size: 0px + @i;
+	}
+
+	.create-font-size(@i+2);
+}
+.create-font-size();
+
+.text-center {
+	text-align: center;
+}
+.text-left {
+	text-align: left;
+}
+.text-right {
+	text-align: right;
+}
+// 浮动
+.float-none {
+	float: none;
+}
+.float-left {
+	float: left;
+}
+.float-right {
+	float: right;
+}
+.overflow-hide {
+	overflow: hidden;
+}
+.overflow-auto {
+	overflow: auto;
+}
+.overflow-visible {
+	overflow: visible;
+}
+
+
+
