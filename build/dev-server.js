@@ -14,6 +14,8 @@ var webpackConfig = process.env.NODE_ENV === 'testing'
   ? require('./webpack.prod.conf')
   : require('./webpack.dev.conf')
 
+var mockApi = require('./mockApi')
+//   console.log(mockApi)
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
 // automatically open browser, if not set will be false
@@ -51,8 +53,10 @@ Object.keys(proxyTable).forEach(function (context) {
   app.use(proxyMiddleware(options.filter || context, options))
 })
 
+// app.use('/mock', require('../mock.js'))
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())
+
 
 // serve webpack bundle output
 app.use(devMiddleware)
@@ -60,6 +64,7 @@ app.use(devMiddleware)
 // enable hot-reload and state-preserving
 // compilation error display
 app.use(hotMiddleware)
+mockApi(app);
 
 // serve pure static assets
 var staticPath = path.posix.join(config.dev.assetsPublicPath, config.dev.assetsSubDirectory)

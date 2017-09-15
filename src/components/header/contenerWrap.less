@@ -1,0 +1,45 @@
+.body{
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);;
+}
+.menu{
+    height: 46px;
+    line-height: 46px;
+    width: 100%;
+    background: #404040;
+    color: rgba(255, 255, 255, 0.67);
+    .menu-item{
+        position: relative;
+        float: left;
+        display: block;
+        padding: 0 20px;
+        cursor: pointer;
+    }
+    a{
+        display: block;
+        transition: all .3s;
+        color: rgba(255, 255, 255, 0.67);
+        &:hover{
+            color: #fff;
+            i{
+                color: #fff;
+            }
+        }
+        i{
+            transition: all .3s;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.67);
+            display: inline-block;
+            font-style: normal;
+            vertical-align: middle;
+            text-align: center;
+            text-transform: none;
+            line-height: 1;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+    }
+    .menu-item-selected > a{
+        color: #fff;
+    }
+}

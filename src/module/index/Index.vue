@@ -1,12 +1,13 @@
 <template>
     <div class="content">
         <h1 class="tittle">{{ dream}}</h1>
+        <i class="line"></i>
         <video autoplay width="480" height="360">
             <source src="../../assets/xcz.mp4">
             啊哦，浏览器不支持视频呀，快去换个试试、、、
         </video>
 
-        <a class="jump" href="#">点击前往</a>
+        <a class="jump" href="#/home">点击前往</a>
 
     </div>
 </template>
@@ -35,6 +36,12 @@ export default {
         color: #fff;
         margin-top: 60px;
         font-style: italic;
+    }
+    .line{
+        display: inline-block;
+        width: 100%;
+        height: 2px;
+        background: #FFFF00;
     }
 </style>
 
