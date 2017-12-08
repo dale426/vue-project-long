@@ -22,7 +22,8 @@ module.exports = {
     extensions: ['.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src')
+      '@': resolve('src'),
+      'src': path.resolve(__dirname, '../src')
     }
   },
   module: {
@@ -45,10 +46,6 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test')]
-      },
-      {
-        test: /\.less$/,
-        loader: "style-loader!css-loader!less-loader",
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

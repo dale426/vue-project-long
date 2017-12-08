@@ -2,20 +2,20 @@
     <contenerWrap>
         <div class="banner">
             <ul class="clearfix">
+                <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
                 <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb2.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb3.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb4.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb5.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb6.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb7.jpg" alt=""></a></li>
+                <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
                 <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
             </ul>
             <ul>
                 <li class="now"></li>
-                <li></li>
+                <li @click="clickHandle"></li>
                 <li></li>
                 <li></li>
                 <li></li>
@@ -35,7 +35,16 @@ export default {
             dream: '永远年轻、永远热泪盈眶'
         }
     },
-    components: {contenerWrap}
+    components: {contenerWrap},
+    methods: {
+        clickHandle () {
+            let num = 0
+            for (let i = 0; i < 10; i++) {
+                num += i
+            }
+            console.log(num)
+        }
+    }
 }
 </script>
 <style lang="less">
@@ -46,7 +55,7 @@ export default {
       width: 100%;
       ul:first-child {
           width: 1000%;
-          transform: translateX(-10%);
+          transform: translateX(10%);
           -webkit-transform: translateX(-10%);
           li {
               width: 10%;
