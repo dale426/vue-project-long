@@ -3,7 +3,7 @@
         <div class="parents">
             <h2>我是父组件</h2>
             <div class="p-content">
-                <div class="u-text">父组件内容： {{msg}}</div>
+                <div class="u-text">父组件内容： {{ msg }}</div>
                 <p class="u-info">点击按钮激活子组件，并传值下去</p>
                 <Button type="warning">激活子组件</Button>
             </div>

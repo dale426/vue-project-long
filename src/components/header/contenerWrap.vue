@@ -1,5 +1,5 @@
 <template>
-    <div class="body">
+  <div class="body">
         <menu class="menu" type="list">
             <li class="menu-item"><a href="/"><i class="icon-menu iconfont icon-homepage"></i>首页</a></li>
             <li class="menu-item"><a href="#/props"><i class="icon-menu iconfont icon-homepage"></i>Vue父子传值</a></li>
@@ -9,8 +9,6 @@
             <li class="menu-item"><a href="/"><i class="icon-menu iconfont icon-homepage"></i>首页</a></li>
             <li class="menu-item"><a href="/"><i class="icon-menu iconfont icon-homepage"></i>首页</a></li>
             <li class="menu-item"><a href="/"><i class="icon-menu iconfont icon-homepage"></i>首页</a></li>
-            
-            
             <li></li>
             <li></li>
             <li></li>
@@ -19,7 +17,7 @@
         <div class="main">
             <slot> </slot>   
         </div>
-    </div>
+  </div>
 </template>
 <script>
 export default {
