@@ -3,16 +3,12 @@
         <div class="parents">
             <h2>我是父组件</h2>
             <div class="p-content">
-<<<<<<< HEAD
                 <div class="u-text">父组件内容： {{ msg }}</div>
-=======
-                <div class="u-text">父组件内容</div>
                 <Form :model="formItem" :label-width="80">
                     <FormItem label="姓名：">
                         <Input v-model="formItem.name" placeholder="Enter something..."> </Input>
                     </FormItem>
                 </Form>
->>>>>>> cccdcd40d0ed9420edadb2810b7b2a51b31c6e04
                 <p class="u-info">点击按钮激活子组件，并传值下去</p>
                 <Button type="warning">激活子组件</Button>
             </div>
