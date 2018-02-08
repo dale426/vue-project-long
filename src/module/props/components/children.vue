@@ -1,13 +1,12 @@
 <template>
     <div>
-        <h1>我是子组件</h1>
-        <div>值由父组件传递下来：</div>
+        <h2>我是子组件</h2>
+        <div class="u-text">值由父组件传递下来：</div>
         <div>
-            <Button type="success">接收</Button>
             <ul>
                 <li>姓名：{{ name }}</li>
-                <li>年龄：{{ age }} </li>
-                <li>存款：{{ money }} </li>
+                <li>年龄：{{ acount }} </li>
+                <li>存款：<strong style="color: red;"> {{ money }} </strong> </li>
             </ul>
         </div>
     </div>
@@ -16,7 +15,7 @@
 <script>
 export default {
     name: 'chilrdren',
-    props: ['name', 'age', 'money'],
+    props: ['name', 'acount', 'money'],
     data() {
         return {
             message: ''
@@ -28,5 +27,9 @@ export default {
 }
 </script>
 <style lang="less">
-
+    .u-text{
+        padding: 30px 0;
+        color: #ff0080;
+        font-size: 16px;
+    }
 </style>

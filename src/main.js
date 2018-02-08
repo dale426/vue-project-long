@@ -6,7 +6,8 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 // import 'iview/dist/styles/iview.css'   // 使用 CSS
-import 'src/style/iview/index.less'
+import 'src/style/iview/index.less'  // 引入iview本地样式
+import 'src/style/user.less'
 import axios from 'axios'
 
 Vue.prototype.$http = axios

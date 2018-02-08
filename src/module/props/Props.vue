@@ -1,20 +1,34 @@
 <template>
-    <contenerWrap> 
-        <div class="parents">
-            <h2>我是父组件</h2>
-            <div class="p-content">
-                <div class="u-text">父组件内容： {{ msg }}</div>
-                <Form :model="formItem" :label-width="80">
-                    <FormItem label="姓名：">
-                        <Input v-model="formItem.name" placeholder="Enter something..."> </Input>
-                    </FormItem>
-                </Form>
-                <p class="u-info">点击按钮激活子组件，并传值下去</p>
-                <Button type="warning">激活子组件</Button>
+    <contenerWrap>
+        <div class="wrap">
+            <div class="wrap-conter">
+                <h2>我是父组件</h2>
+                <div class="p-content">
+                    <div class="u-text">父组件内容-->> 账户余额： {{ formItem.money }}</div>
+                    <div></div>
+                    <Form :model="formItem" :label-width="80" class="long-form-wrap">
+                        <FormItem label="姓名：" style="min-width: 200px;">
+                            <span> {{ formItem.name }} </span>
+                        </FormItem>
+                        <FormItem label="账号：" style="min-width: 200px;">
+                            <span> {{ formItem.acount }} </span>
+                        </FormItem>
+                        <FormItem label="存款：">
+                            <Input  placeholder="请输入你的存款"> </Input>
+                        </FormItem>
+                        <Button type="success" @on-click="changeMoney">存入账户</Button>
+                        
+                    </Form>
+                    <p>
+                        <span>子组件:</span>
+                        &ltChildren :money="formItem.money" &gt &lt/Children&gt
+                    </p>
+                </div>
             </div>
-        </div>
-        <div>
-            <Children :name="formItem.name" :age="formItem.age" :money="formItem.money"> </Children>
+
+            <div class="wrap-conter">
+                <Children :money="formItem.money" :acount="formItem.acount" :name="formItem.name"> </Children>
+            </div>
         </div>
     </contenerWrap>
 </template>
@@ -25,22 +39,30 @@ export default {
     name: 'Props',
     data () {
         return {
-            msg: 0,
             formItem: {
-                name: 'liyulong',
-                age: '25',
-                money: 1000000
+                name: '李玉龙',
+                acount: '621559 260600 186 1109',
+                money: ''
             }
         }
     },
-    components: {contenerWrap, Children}
+    components: {contenerWrap, Children},
+    methods: {
+        changeMoney(e) {
+            this.formItem.money += Number(e.target.value)
+        }
+    }
 }
 </script>
 <style lang="less">
-    .parents{
+    .wrap{
+        display: flex;
+    }
+    .wrap-conter{
         margin: 20px;
         padding: 15px;
         border: 2px solid #ff8000;
+        width: 50%;
     }
     .p-content{
         padding-left: 40px;
