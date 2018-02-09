@@ -14,9 +14,9 @@
                             <span> {{ formItem.acount }} </span>
                         </FormItem>
                         <FormItem label="存款：">
-                            <Input  placeholder="请输入你的存款"> </Input>
+                            <Input v-model="tempMoney"  placeholder="请输入你的存款"> </Input>
                         </FormItem>
-                        <Button type="success" @on-click="changeMoney">存入账户</Button>
+                        <Button type="success" @click="changeMoney">存入账户</Button>
                         
                     </Form>
                     <p>
@@ -39,17 +39,19 @@ export default {
     name: 'Props',
     data () {
         return {
+            tempMoney: '',
             formItem: {
                 name: '李玉龙',
                 acount: '621559 260600 186 1109',
-                money: ''
+                money: 0
             }
         }
     },
     components: {contenerWrap, Children},
     methods: {
-        changeMoney(e) {
-            this.formItem.money += Number(e.target.value)
+        changeMoney() {
+            this.formItem.money += Number(this.tempMoney)
+            this.tempMoney = ''
         }
     }
 }
