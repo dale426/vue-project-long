@@ -4,7 +4,7 @@
             <div class="wrap-conter">
                 <h2>我是父组件</h2>
                 <div class="p-content">
-                    <div class="u-text">父组件内容-->> 账户余额： {{ formItem.money }}</div>
+                    <div class="u-text">父组件内容-->> 账户余额： {{ tempMoney }}</div>
                     <div></div>
                     <Form :model="formItem" :label-width="80" class="long-form-wrap">
                         <FormItem label="姓名：" style="min-width: 200px;">
@@ -14,7 +14,7 @@
                             <span> {{ formItem.acount }} </span>
                         </FormItem>
                         <FormItem label="存款：">
-                            <Input v-model="tempMoney"  placeholder="请输入你的存款"> </Input>
+                            <Input v-model="formItem.money"  placeholder="请输入你的存款"> </Input>
                         </FormItem>
                         <Button type="success" @click="changeMoney">存入账户</Button>
                         
@@ -27,7 +27,12 @@
             </div>
 
             <div class="wrap-conter">
-                <Children :money="formItem.money" :acount="formItem.acount" :name="formItem.name"> </Children>
+                <Children 
+                    :long-money="tempMoney" 
+                    :acount="formItem.acount" 
+                    :name="formItem.name"
+                    v-on:child-cost="costMoney"
+                > </Children>
             </div>
         </div>
     </contenerWrap>
@@ -39,7 +44,7 @@ export default {
     name: 'Props',
     data () {
         return {
-            tempMoney: '',
+            tempMoney: 0,
             formItem: {
                 name: '李玉龙',
                 acount: '621559 260600 186 1109',
@@ -50,8 +55,12 @@ export default {
     components: {contenerWrap, Children},
     methods: {
         changeMoney() {
-            this.formItem.money += Number(this.tempMoney)
-            this.tempMoney = ''
+            this.tempMoney += Number(this.formItem.money) 
+            this.formItem.money = ''
+        },
+        costMoney(money) {
+            console.log("money", money)
+            this.tempMoney -= Number(money)
         }
     }
 }
