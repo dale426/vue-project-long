@@ -1,10 +1,10 @@
 <template>
-    <div>
+    <div class="jhk">
         <h2>我是子组件</h2>
         <div class="u-text">值由父组件传递下来：</div>
             <ul class="parent-info">
                 <li>姓名：{{ name }}</li>
-                <li>年龄：{{ acount }} </li>
+                <li>账号：{{ acount }} </li>
                 <li>存款：<strong style="color: red;"> {{ money }} </strong> </li>
             </ul>
             <div class="children-change">
@@ -34,12 +34,13 @@ export default {
     },
     methods: {
         changeMoney() {
-            
+            this.$emit('on-cost', this.tempMoney)
+            this.tempMoney = ''
         }
     }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
     .u-text{
         padding: 10px 0;
         color: #ff0080;
@@ -50,6 +51,5 @@ export default {
         padding: 10px;
         min-height: 100px;
         border: 1px solid #ccc;
-    }
-    
+    }    
 </style>

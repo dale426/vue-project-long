@@ -1,41 +1,37 @@
 <template>
-    <contenerWrap>
-        <div class="banner">
-            <ul class="clearfix">
-                <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb2.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb3.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb4.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb5.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb6.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb7.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
-                <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
-            </ul>
-            <ul>
-                <li class="now"></li>
-                <li @click="clickHandle"></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-    </contenerWrap>
+    <div class="banner">
+        <ul class="clearfix">
+            <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb2.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb3.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb4.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb5.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb6.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb7.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
+            <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
+        </ul>
+        <ul>
+            <li class="now"></li>
+            <li @click="clickHandle"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
 </template>
 <script>
-import contenerWrap from '@/components/header/contenerWrap'
-
 export default {
+    name: 'Home',
     data () {
         return {
             dream: '永远年轻、永远热泪盈眶'
         }
     },
-    components: {contenerWrap},
     methods: {
         clickHandle () {
             let num = 0

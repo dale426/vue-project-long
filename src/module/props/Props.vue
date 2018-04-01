@@ -1,39 +1,41 @@
 <template>
-    <contenerWrap>
-        <div class="wrap">
-            <div class="wrap-conter">
-                <h2>我是父组件</h2>
-                <div class="p-content">
-                    <div class="u-text">父组件内容-->> 账户余额： {{ formItem.money }}</div>
-                    <div></div>
-                    <Form :model="formItem" :label-width="80" class="long-form-wrap">
-                        <FormItem label="姓名：" style="min-width: 200px;">
-                            <span> {{ formItem.name }} </span>
-                        </FormItem>
-                        <FormItem label="账号：" style="min-width: 200px;">
-                            <span> {{ formItem.acount }} </span>
-                        </FormItem>
-                        <FormItem label="存款：">
-                            <Input v-model="tempMoney"  placeholder="请输入你的存款"> </Input>
-                        </FormItem>
-                        <Button type="success" @click="changeMoney">存入账户</Button>
-                        
-                    </Form>
-                    <p>
-                        <span>子组件:</span>
-                        &ltChildren :money="formItem.money" &gt &lt/Children&gt
-                    </p>
-                </div>
-            </div>
-
-            <div class="wrap-conter">
-                <Children :money="formItem.money" :acount="formItem.acount" :name="formItem.name"> </Children>
+    <div class="wrap">
+        <div class="wrap-conter">
+            <h2>我是父组件</h2>
+            <div class="p-content">
+                <div class="u-text">父组件内容-->> 账户余额： {{ formItem.money }}</div>
+                <div></div>
+                <Form :model="formItem" :label-width="80" class="long-form-wrap">
+                    <FormItem label="姓名：" style="min-width: 200px;">
+                        <span> {{ formItem.name }} </span>
+                    </FormItem>
+                    <FormItem label="账号：" style="min-width: 200px;">
+                        <span> {{ formItem.acount }} </span>
+                    </FormItem>
+                    <FormItem label="存款：">
+                        <Input v-model="tempMoney"  placeholder="请输入你的存款" />
+                    </FormItem>
+                    <Button type="success" @click="changeMoney">存入账户</Button>
+                    
+                </Form>
+                <p>
+                    <span>子组件:</span>
+                    <span>&ltChildren :money="formItem.money" &gt &lt/Children&gt</span>
+                </p>
             </div>
         </div>
-    </contenerWrap>
+
+        <div class="wrap-conter">
+            <Children 
+                :money="formItem.money" 
+                :acount="formItem.acount" 
+                :name="formItem.name"
+                @on-cost="reduceMoney">
+            </Children>
+        </div>
+    </div>
 </template>
 <script>
-import contenerWrap from '@/components/header/contenerWrap'
 import Children from './components/children'
 export default {
     name: 'Props',
@@ -47,16 +49,20 @@ export default {
             }
         }
     },
-    components: {contenerWrap, Children},
+    components: {Children},
     methods: {
         changeMoney() {
             this.formItem.money += Number(this.tempMoney)
             this.tempMoney = ''
+        },
+        reduceMoney(fee) {
+            console.log('fee', fee)
+            this.formItem.money -= Number(fee)
         }
     }
 }
 </script>
-<style lang="less">
+<style lang="less" scoped>
     .wrap{
         display: flex;
     }
@@ -79,6 +85,7 @@ export default {
             // italic  : 斜体
             font-style: italic;
         }
+
     }
 </style>
 

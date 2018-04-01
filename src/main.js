@@ -5,16 +5,23 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import iView from 'iview'
+import { AgGridVue } from 'ag-grid-vue'
+
 // import 'iview/dist/styles/iview.css'   // 使用 CSS
 import 'src/style/user.less'
 
 import 'src/style/iview/index.less'  // 引入iview本地样式
 import axios from 'axios'
+// 引入ag-grid样式
+import '../node_modules/ag-grid/dist/styles/ag-grid.css'
+// import '../node_modules/ag-grid/dist/styles/theme-fresh.css'
+import '../node_modules/ag-grid/dist/styles/ag-theme-balham.css'
 
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 // Vue.use(VueRouter);
 Vue.use(iView)
+Vue.component('AgGridVue', AgGridVue)
 
 /* eslint-disable no-new */
 new Vue({

@@ -1,20 +1,14 @@
 <template>
-    <contenerWrap>
+    <div>
         <div class="item" v-bind:style="{border: border + 'px ' + 'solid' + ' ' + color}">
             内联样式与数据绑定
         </div>
         <div @click="handle" class="trans" v-bind:style="change">
             动画效果
         </div>
-        <div>
-            222
-            <img src="https://wmstest.tf56.com/pages/incomeManagement/orderList.html?isFromLoginPage=true" alt="lala">
-            <a href="https://wmstest.tf56.com/pages/incomeManagement/orderList.html?isFromLoginPage=true&entryListCode=R013m170830000005">aaaa</a>
-        </div>
-    </contenerWrap>
+    </div>
 </template>
 <script>
-import contenerWrap from '@/components/header/contenerWrap'
 
 export default {
     data () {
@@ -28,7 +22,6 @@ export default {
             translateX: 10
         }
     },
-    components: {contenerWrap},
     methods: {
         handle () {
             if (this.index > 5) {

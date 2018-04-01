@@ -1,0 +1,144 @@
+/*! oms v1.0.0  ag-grid table重定义样式库*/
+@import "./iview/custom.less";
+.long-table {
+  &.ag-theme-balham{
+    .ag-font-style {
+      user-select: initial;
+      -moz-user-select: text;
+      -ms-user-select: text;
+      -webkit-user-select: text;
+    }
+    // .ag-ltr .ag-header-cell {
+    //   border-right: 1px solid @table-split-right;
+    // }
+    .ag-header {
+      background: -webkit-linear-gradient(@assist-gray, @assist-gray);
+      background: -moz-linear-gradient(@assist-gray, @assist-gray);
+      background: -o-linear-gradient(@assist-gray, @assist-gray);
+      background: -ms-linear-gradient(@assist-gray, @assist-gray);
+      background: linear-gradient(@assist-gray, @assist-gray);
+      border-bottom: 1px solid @assist-gray;
+    }
+    .ag-body .ag-cell{
+      text-align: center;
+      border-right: 1px solid #dddee1;
+    }
+    .ag-body .ag-cell-focus {
+      border: 1px solid #0091EA;
+      outline: initial;
+    }
+    .ag-header-cell-label{
+      width: 100%;
+      justify-content: center;
+    }
+    // .ag-header-select-all{
+    //   padding-left: 20px;
+    //   padding-top: 5px;
+    // }
+    // .ag-root {
+    //   border-color: @assist-gray;
+    // }
+    // .ag-row-even, .ag-row-odd {
+    //   background-color: #fff;
+    //   border-bottom: 1px solid @assist-gray;
+    // }
+    // .ag-ltr .ag-cell-no-focus {
+    //   border-right: 1px solid @assist-gray;
+    //   border-left: 1px solid transparent;
+    // }
+
+    // // 可编辑时cell不会溢出隐藏
+    // .ag-cell-inline-editing{
+    //   overflow: visible;
+    // }
+    // &.detail{
+    //   .oms-cell-operate > span.oms-operate-disabled{
+    //     color: @text-color;
+    //     cursor: default;
+      // }
+    // }
+    // .ag-overlay-wrapper {
+    //   color: @main-dark;
+    //   .oms-icon {
+    //     font-size: 60px;
+    //   }
+    //   .oms-no-data-tpl{
+    //     font-size: 16px;
+    //     text-align: center;
+      // }
+    // }
+/*     &.oms-no-data {
+      .ag-body-viewport{
+        height: 120px;
+      }
+      .ag-body{
+        text-align: center;
+        vertical-align: middle;
+      }
+      .ag-body:after{
+        position: absolute;
+        top: 40px;
+        content: '无数据';
+        display: inline-block;
+        width: 60px;
+        padding-top: 65px;
+        color: @font-light;
+        left: 50%;
+        margin-left: -30px;
+        font-size: 16px;
+        // background: url("../assets/images/no-data.png") no-repeat 50% 20% ;
+        text-align: center;
+      }
+    } */
+  }
+
+}
+.oms-page-wapper {
+  margin-top: 15px;
+  &:after {
+    display: table;
+    content: " ";
+    clear: both;
+  }
+
+  .oms-page.ivu-page {
+    > li {
+      border-right-width: 0;
+      margin-right: -5px;
+      border-radius: 0;
+      &:last-of-type {
+        border-right-width: 1px;
+      }
+    }
+
+    .ivu-page-item-active {
+      margin-right: -5px;
+    }
+    .ivu-page-next {
+      margin-left: 0;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+    }
+    .ivu-page-prev {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+  }
+  .oms-fresh{
+    width: 32px;
+    height: 32px;
+    display: inline-block;
+    background-color: #fff;
+    border:1px solid @assist-light-steel-blue;
+    border-radius:100%;
+    text-align: center;
+    line-height: 32px;
+    cursor: pointer;
+    .iconfont{
+      font-size: 22px;
+      color: #d3ecfd;
+    }
+  }
+}
+
+

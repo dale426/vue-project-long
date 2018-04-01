@@ -13,7 +13,7 @@ module.exports = {
                 shouldPayFee: Math.random() * 100 >> 0,
                 sourceCode: '@string(10)',
                 sourceFrom: '中国',
-                type: '类型'
+                type: '类型1'
             }]
         })
         setTimeout(() => {
