@@ -5,12 +5,12 @@
             <ul class="parent-info">
                 <li>姓名：{{ name }}</li>
                 <li>账号：{{ acount }} </li>
-                <li>存款：<strong style="color: red;"> {{ money }} </strong> </li>
+                <li>存款：<strong style="color: red;"> {{ longMoney }} </strong> </li>
             </ul>
             <div class="children-change">
                 <Form :model="formItem" :label-width="80" class="long-form-wrap">
                     <FormItem label="消费金额：">
-                        <Input v-model="formItem.costMoney"  placeholder="请输入你的存款"></Input>
+                        <Input v-model="formItem.costMoney"  placeholder="请输入你的存款"/>
                     </FormItem>
                     <Button type="primary" @click="changeMoney">消费</Button>
                 </Form>
@@ -33,8 +33,8 @@ export default {
     },
     methods: {
         changeMoney() {
-            this.$emit('on-cost', this.tempMoney)
-            this.tempMoney = ''
+            this.$emit('on-cost', this.formItem.costMoney)
+            this.formItem.costMoney = ''
         }
     }
 }

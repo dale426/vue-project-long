@@ -3,7 +3,7 @@
         <div class="wrap-conter">
             <h2>我是父组件</h2>
             <div class="p-content">
-                <div class="u-text">父组件内容-->> 账户余额： {{ formItem.money }}</div>
+                <div class="u-text">父组件内容-->> 账户余额： {{ tempMoney }}</div>
                 <div></div>
                 <Form :model="formItem" :label-width="80" class="long-form-wrap">
                     <FormItem label="姓名：" style="min-width: 200px;">
@@ -13,7 +13,7 @@
                         <span> {{ formItem.acount }} </span>
                     </FormItem>
                     <FormItem label="存款：">
-                        <Input v-model="tempMoney"  placeholder="请输入你的存款" />
+                        <Input v-model="formItem.money"  placeholder="请输入你的存款" />
                     </FormItem>
                     <Button type="success" @click="changeMoney">存入账户</Button>
                     
@@ -27,7 +27,7 @@
 
         <div class="wrap-conter">
             <Children 
-                :money="formItem.money" 
+                :long-money="tempMoney" 
                 :acount="formItem.acount" 
                 :name="formItem.name"
                 @on-cost="reduceMoney">
@@ -52,21 +52,12 @@ export default {
     components: {Children},
     methods: {
         changeMoney() {
-<<<<<<< HEAD
-            this.formItem.money += Number(this.tempMoney)
-            this.tempMoney = ''
-        },
-        reduceMoney(fee) {
-            console.log('fee', fee)
-            this.formItem.money -= Number(fee)
-=======
             this.tempMoney += Number(this.formItem.money) 
             this.formItem.money = ''
         },
-        costMoney(money) {
+        reduceMoney(money) {
             console.log("money", money)
             this.tempMoney -= Number(money)
->>>>>>> a82f1ed38819b6b7938465c1931a826b59edcac3
         }
     }
 }
