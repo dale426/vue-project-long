@@ -52,21 +52,12 @@ export default {
     components: {Children},
     methods: {
         changeMoney() {
-<<<<<<< HEAD
             this.formItem.money += Number(this.tempMoney)
             this.tempMoney = ''
         },
         reduceMoney(fee) {
             console.log('fee', fee)
             this.formItem.money -= Number(fee)
-=======
-            this.tempMoney += Number(this.formItem.money) 
-            this.formItem.money = ''
-        },
-        costMoney(money) {
-            console.log("money", money)
-            this.tempMoney -= Number(money)
->>>>>>> a82f1ed38819b6b7938465c1931a826b59edcac3
         }
     }
 }
