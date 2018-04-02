@@ -1,21 +1,45 @@
 <template>
-  <div class="long-ag">
-      <ag-grid-vue
-        style="width: 100%; height: 350px;" 
-        class="ag-theme-balham long-table"
-        :enableColResize="true"
-        :rowHeight="tableRowHeight"
-        :headerHeight="tableHeaderRowHeight"
-        :gridOptions="gridOptions"
-        :columnDefs="columnDefs"
-        :rowData="rowData"
-      ></ag-grid-vue>
-  </div>
+    <div class="long-wraper">
+        <Breadcrumb>
+            <BreadcrumbItem to="/"><Icon type="ios-home-outline"></Icon> 主页</BreadcrumbItem>
+            <BreadcrumbItem to="/components/breadcrumb">投资产品</BreadcrumbItem>
+            <BreadcrumbItem>我的持仓</BreadcrumbItem>
+        </Breadcrumb>
+        <div class="long-ag">
+            <ag-grid-vue
+                style="width: 100%; height: 350px;" 
+                class="ag-theme-balham long-table"
+                :enableColResize="true"
+                :rowHeight="tableRowHeight"
+                :headerHeight="tableHeaderRowHeight"
+                :gridOptions="gridOptions"
+                :columnDefs="columnDefs"
+                :rowData="rowData"
+            ></ag-grid-vue>
+        </div>
+        <div class="long-page-wraper">
+            <Page 
+                :total="total"
+                :page-size="params.pageSize"
+                :page-size-opts="DefaultPageSizeOpt"
+                :current="params.pageNo"
+                size="small"
+                show-elevator 
+                show-sizer
+                show-total
+                @on-change="pageChange"
+                @on-page-size-change="pageSizeChange"
+            ></Page>
+        </div>
+    </div>
+  
 </template>
 <script>
     import {
         tableHeaderRowHeight,
         tableRowHeight,
+        DefaultPageSize,
+        DefaultPageSizeOpt
     } from '../../utils/const'
 export default {
     name: 'fundHolding',
@@ -26,6 +50,12 @@ export default {
             tableHeaderRowHeight,
             tableRowHeight,
             rowData: [],
+            total: 40,
+            DefaultPageSizeOpt,
+            params: {
+                pageNo: 1,
+                pageSize: DefaultPageSize
+            }
         }
     },
     beforeMount() {
@@ -40,6 +70,7 @@ export default {
         }
     },
     mounted() {
+        // $http.get()
         this.rowData =[{
             number: 1,
             type: '黄金',
@@ -59,7 +90,7 @@ export default {
             buyTime: '2018-04-01'
         },
         {
-            number: 1,
+            number: 3,
             type: '黄金',
             name: '京东黄金',
             code: '0000',
@@ -68,7 +99,7 @@ export default {
             buyTime: '2018-04-01'
         },
         {
-            number: 2,
+            number: 4,
             type: '基金',
             name: '兴全趋势混合',
             code: '107123',
@@ -78,6 +109,14 @@ export default {
         }]
     },
     methods: {
+        pageChange(page) {
+            this.params.pageNo = page
+            // query
+        },
+        pageSizeChange(size) {
+            this.params.pageSize = size
+            // query
+        },
         createColumnDefs() {
             this.columnDefs = [{
                 headerName: "序号",
@@ -118,8 +157,4 @@ export default {
 }
 </script>
 <style lang="less">
-    .long-ag{
-        margin-top: 20px;
-        padding: 20px;
-    }
 </style>

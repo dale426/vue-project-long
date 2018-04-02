@@ -13,9 +13,10 @@ import 'src/style/user.less'
 import 'src/style/iview/index.less'  // 引入iview本地样式
 import axios from 'axios'
 // 引入ag-grid样式
-import '../node_modules/ag-grid/dist/styles/ag-grid.css'
+import './style/ag-grid/ag-grid.css'
+import './style/ag-grid/ag-theme-balham.css'
 // import '../node_modules/ag-grid/dist/styles/theme-fresh.css'
-import '../node_modules/ag-grid/dist/styles/ag-theme-balham.css'
+// import '../node_modules/ag-grid/dist/styles/ag-theme-balham.css'
 
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
