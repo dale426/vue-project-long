@@ -4,6 +4,12 @@
             {
                 "type": "node",
                 "request": "launch",
+                "name": "node",
+                "program": "${workspaceFolder}/src/server/server.js"
+            },
+            {
+                "type": "node",
+                "request": "launch",
                 "name": "Launch Program",
                 "program": "${workspaceRoot}\\build\\dev-server.js"
             }

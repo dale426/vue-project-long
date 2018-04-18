@@ -6,6 +6,7 @@ import App from './App'
 import router from './router'
 import iView from 'iview'
 import { AgGridVue } from 'ag-grid-vue'
+import request from './utils/request'
 
 // import 'iview/dist/styles/iview.css'   // 使用 CSS
 import 'src/style/user.less'
@@ -17,6 +18,7 @@ import './style/ag-grid/ag-grid.css'
 import './style/ag-grid/ag-theme-balham.css'
 // import '../node_modules/ag-grid/dist/styles/theme-fresh.css'
 // import '../node_modules/ag-grid/dist/styles/ag-theme-balham.css'
+var _ = require('lodash')
 
 Vue.prototype.$http = axios
 Vue.config.productionTip = false

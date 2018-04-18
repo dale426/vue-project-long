@@ -1,7 +1,7 @@
 @import "common.less";
 @import "reset-iview.less";
 @import 'customTable.less';
-
+// @import './iview/custom.less';
 .long-wraper{
     padding: 20px;
     .long-ag{
@@ -11,4 +11,42 @@
         text-align: right;
         margin-top: 20px;
     }
+}
+.long-form-wrap {
+    .long-form-input .ivu-form-item{
+        margin-bottom: 18px;
+    }
+}
+.long-btn-group{
+    margin-top: 20px;
+    overflow: hidden;
+    position: relative;
+    .btn-group-single{
+        padding: 0 20px;
+        text-align: center;
+        height: 48px;
+        float: left;
+        cursor: pointer;
+        position: relative;
+        line-height: 1.2;
+        &:hover{
+            color: @primary-color;
+        }
+    }
+    .btn-group-single:nth-last-child(n+2){
+        &:after{
+            content: '';
+            height: 30px;
+            width: 0;
+            border-right: 1px solid #ccc;
+            position: absolute;
+            top: 9px;
+            right: 0;
+        }
+    }
+
+    .iconfont{
+        font-size: 26px;
+    }
+    
 }

@@ -1,13 +1,12 @@
-/**
- * Created by Kevin Zhang on 2017/10/17.
- */
+
 
 /**
  * http配置
  */
 import axios from 'axios'
 import jsonpAdapter from 'axios-jsonp'
-import { dealParams, createSecret } from './utils'
+import jsonpFunder from './fundJsonp'
+// import { dealParams, createSecret } from './utils'
 import qs from 'qs'
 // import {isOnlineEvn} from './utils'
 // http请求拦截器
@@ -25,7 +24,7 @@ axios.interceptors.request.use(
 const request = options => axios.request(options)
 
 request.get = (url, params = {}) => {
-    params = dealParams(params)
+    // params = dealParams(params)
     return new Promise((resolve, reject) => {
         axios.get(
             url, {params},
@@ -37,12 +36,12 @@ request.get = (url, params = {}) => {
     })
 }
 request.post = (url, params = {}) => {
-    const reqCsrfToken = Cookie.getItem('Csrf_token') || ''
-    if (_.isObject(params)) {
+    // const reqCsrfToken = Cookie.getItem('Csrf_token') || '8555sdaafafsadsa'
+/*     if (_.isObject(params)) {
         params['Csrf_token'] = reqCsrfToken
     } else {
         params = params + '&Csrf_token=' + reqCsrfToken
-    }
+    } */
     return new Promise((resolve, reject) => {
         axios.post(
             url, qs.stringify(params)
@@ -83,10 +82,11 @@ request.jsonp = (url, params = {}, callbackParamName = 'callback') => {
     return new Promise((resolve, reject) => {
         return axios({
             url,
-            adapter: jsonpAdapter,
+            adapter: jsonpFunder,
             params,
             callbackParamName               // optional, 'callback' by default
         }).then((res) => {
+            console.log(res)
             resolve(res.data)
         }).catch((res) => {
             reject(res.data)
@@ -94,6 +94,7 @@ request.jsonp = (url, params = {}, callbackParamName = 'callback') => {
     })
 }
 window.request = request
+// export default request
 
 class Person {
     constructor (name, age) {

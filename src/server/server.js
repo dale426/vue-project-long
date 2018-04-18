@@ -1,30 +1,15 @@
-var express = require('express')
-var path = require('path')
-var port = process.env.PORT || 3000
+const express = require('express')
+const path = require('path')
+const port = process.env.PORT || 3000
 const mongoose = require('mongoose')
-var app = express()
+const app = express()
+const bodyParser = require('body-parser'); // 请求体解析
+app.set('port', 3000)
 
-// app.set('port', 3000)
-mongoose.Promise = require('bluebird')
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
 
-try {
-    mongoose.connect('mongodb://localhost/vue-project-long')
-} catch (error) {
-    console.log(error)
-}
-
-// mongoose.connection
-//     .once('open', function() {
-//         console.log("mongoose connection")
-//     })
-//     .on('error', function(error){
-//         throw error
-//     })
-
-
-app.get('/', function(req, res) {
-    return res.json('hello word')
-})
+require('./router')(app)
 
 
 app.listen(port, function() {

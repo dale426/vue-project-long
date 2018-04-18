@@ -2,7 +2,7 @@
  * Created by Kevin Zhang on 2017/10/17.
  */
 import moment from 'moment'
-import {devAcl, onlineAcl} from '/share/js/utils/const'
+// import {devAcl, onlineAcl} from '/share/js/utils/const'
 
 //  获取url中的参数
 export function getQueryStringArgs() {
@@ -30,7 +30,7 @@ export function getQueryStringArgs() {
     return args
 }
 
-export function getDataFormat (thisDate, fmt) {
+/* export function getDataFormat (thisDate, fmt) {
     if (!_.isDate(thisDate)) {
         return null
     }
@@ -58,7 +58,7 @@ export function getDataFormat (thisDate, fmt) {
         }
     }
     return fmt
-}
+} */
 
 export function getAdvancePrams (data) {
     let obj = {}
