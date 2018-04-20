@@ -4,11 +4,23 @@
  * http配置
  */
 import axios from 'axios'
-import jsonpAdapter from 'axios-jsonp'
+// import jsonpAdapter from 'axios-jsonp'
 import jsonpFunder from './fundJsonp'
 // import { dealParams, createSecret } from './utils'
 import qs from 'qs'
 // import {isOnlineEvn} from './utils'
+function dealFundApi(params = {}) {
+    params = {
+        ...params,
+        version: '5.2.5',
+        plat: 'Android',
+        appType: 'ttjj',
+        RANGE: 'y',
+        deviceid: '6dd15fab1af8051b949b1abd3e498064||103118330217668',
+        product: 'EFund'
+    }
+    return params
+}
 // http请求拦截器
 axios.interceptors.request.use(
     config => {
@@ -17,14 +29,16 @@ axios.interceptors.request.use(
         return config
     },
     err => {
-        $.UI.tips(err)
+        alert(err)
         return Promise.reject(err)
     }
 )
 const request = options => axios.request(options)
 
 request.get = (url, params = {}) => {
-    // params = dealParams(params)
+    if (url.includes('FundMApi')) {
+        params = dealFundApi(params)
+    }
     return new Promise((resolve, reject) => {
         axios.get(
             url, {params},
@@ -68,7 +82,7 @@ request.importPost = (url, params = {}) => {
 }
 request.aclJsonp = async (url, params = {}) => {
     let tokenUrl = `http://acltest.tf56.com/tfaclWeb/csrfTokenServlet`
-    let csrfType = 'cloudStorehouse' + createSecret()
+    // let csrfType = 'cloudStorehouse' + createSecret()
     let data = await request.jsonp(tokenUrl, {csrfType: csrfType})
     if (data.result === 'error') {
         return data
@@ -79,6 +93,9 @@ request.aclJsonp = async (url, params = {}) => {
 }
 
 request.jsonp = (url, params = {}, callbackParamName = 'callback') => {
+    if (callbackParamName === 'jsonpgz') {
+        url = 'http://fundgz.1234567.com.cn/js/' + url
+    }
     return new Promise((resolve, reject) => {
         return axios({
             url,
@@ -86,7 +103,6 @@ request.jsonp = (url, params = {}, callbackParamName = 'callback') => {
             params,
             callbackParamName               // optional, 'callback' by default
         }).then((res) => {
-            console.log(res)
             resolve(res.data)
         }).catch((res) => {
             reject(res.data)
@@ -96,9 +112,3 @@ request.jsonp = (url, params = {}, callbackParamName = 'callback') => {
 window.request = request
 // export default request
 
-class Person {
-    constructor (name, age) {
-        this.namae = name
-        this.age = age
-    }
-}

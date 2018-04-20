@@ -187,11 +187,21 @@
             }
         },
         methods: {
-            // 查询指定基金
-            async queryFund() {
-                // let data = await request.jsonp('http://fundgz.1234567.com.cn/js/163402.js', {aaa: 123}, 'jsonpgz')
-                let url = '/FundMApi/FundNetDiagram.ashx?version=5.2.5&plat=Android&appType=ttjj&RANGE=y&FCODE=163402&deviceid=6dd15fab1af8051b949b1abd3e498064||103118330217668&product=EFund'
-                let data = await request.get(url, {})
+            // 查询指定基金 近20个交易日的数据
+            async queryFund(code) {
+                let url = '/FundMApi/FundNetDiagram.ashx'
+                let data = await request.get(url, {FCODE: code})
+                this.rowData.filter(element => {
+                    if (element.code === code) {
+                        element.twentyData = data.Datas
+                    }
+                })
+                console.log(this.rowData)
+                this.queryTodayFund()
+            },
+            // 查询指定基金 当前价格
+            async queryTodayFund(code) {
+                let data = await request.jsonp(code + '.js', {}, 'jsonpgz')
                 console.log(data)
             },
             async queryFundList() {
@@ -199,6 +209,12 @@
                 if (data.success === true) {
                     this.rowData = data.data || []
                     this.total = data.data.length || 0
+                    this.rowData.forEach(element => {
+                        if (element.code) {
+                            this.queryFund(element.code)
+                            this.queryTodayFund(element.code)
+                        }
+                    })
                 } else {
                     this.$Message.error(data.msg)
                 }
