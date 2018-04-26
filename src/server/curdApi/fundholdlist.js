@@ -4,7 +4,6 @@ const FundHoldList = model.holdFundLists
 module.exports = function(app) {
     // 查询持仓列表
     app.get('/fund/holdfund/list', function(req, res) {
-        debugger
         FundHoldList
             .find()
             .exec(function(err, data) {

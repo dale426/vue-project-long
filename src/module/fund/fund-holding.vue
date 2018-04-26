@@ -31,6 +31,10 @@
                 :gridOptions="gridOptions"
                 :columnDefs="columnDefs"
                 :rowData="rowData"
+                rowSelection='multiple'
+                :suppressRowClickSelection="true"
+                :rowSelected="onRowSelected"
+                :selectionChanged="onSelectionChanged"
             ></ag-grid-vue>
         </div>
         
@@ -48,8 +52,23 @@
                 @on-page-size-change="pageSizeChange"
             ></Page>
         </div>
+        <!-- 详情列表 -->
+        <div class="long-ag">
+            <ag-grid-vue
+                style="width: 100%; height: 350px;" 
+                class="ag-theme-balham long-table"
+                :enableColResize="true"
+                :rowHeight="tableRowHeight"
+                :headerHeight="tableHeaderRowHeight"
+                :gridOptions="gridOptions2"
+                :columnDefs="columnDefs2"
+                :rowData="rowData2"
+                rowSelection='multiple'
+                :suppressRowClickSelection="true"
+            ></ag-grid-vue>
+        </div>
         <!-- <Button type="primary" @click="queryFund">请求</Button> -->
-        <Button type="primary" @click="queryFund">获取列表</Button>
+        <!-- <Button type="primary" @click="queryFund">获取列表</Button> -->
         <Modal
             width="560"
             title="购买基金"
@@ -104,16 +123,27 @@
         DefaultPageSize,
         DefaultPageSizeOpt
     } from '../../utils/const'
+    import * as calc from '../../utils/calc'
     import { getDataFormat } from '../../utils/utils'
+    function disColor({value = ''}) {
+        let color = 'red'
+        if (value.toString().includes('-')) {
+            color = 'green'
+        }
+        return '<span style="color:' + color + '">' + value + '</span>'
+    }
     export default {
         name: 'fundHolding',
         data() {
             return {
                 gridOptions: {},
+                gridOptions2: {},
                 columnDefs: null,
+                columnDefs2: null,
                 tableHeaderRowHeight,
                 tableRowHeight,
                 rowData: [],
+                rowData2: [],
                 total: 0,
                 DefaultPageSizeOpt,
                 params: {
@@ -170,12 +200,16 @@
         },
         beforeMount() {
             this.gridOptions = {}
+            this.gridOptions2 = {}
             this.createColumnDefs()
+            this.createColumnDefs2()
             this.gridOptions.onGridReady = () => {
                 window.onresize = () => {
                     this.gridOptions.api.sizeColumnsToFit()
+                    this.gridOptions2.api.sizeColumnsToFit()
                 }
                 this.gridOptions.api.sizeColumnsToFit()
+                this.gridOptions2.api.sizeColumnsToFit()
             }
         },
         mounted() {
@@ -186,35 +220,92 @@
                 return this.formData.buyMoney * this.formData.rate / 100 || 0
             }
         },
+        updated() {
+
+            // this.gridOptions.api.refreshInMemoryRowModel('filter')
+            // console.log(this.gridOptions)
+        },
         methods: {
+            onRowSelected(params) {
+                if (params.node.isSelected()) {
+                    let { code, name, floatRate } = params.node.data
+                    this.queryTwentyFund(code, name, floatRate)
+                } else {
+                    let { code } = params.node.data
+                    this.rowData2.forEach((item, i) => {
+                        if (item.code === code) {
+                            this.rowData2.splice(i, 1)
+                        }
+                    })
+                }
+            },
+            onSelectionChanged(params) {
+                // console.log("onSelectionChanged", params)
+            },
             // 查询指定基金 近20个交易日的数据
-            async queryFund(code) {
+            async queryTwentyFund(code = '', name = '', todayRate = '') {
                 let url = '/FundMApi/FundNetDiagram.ashx'
                 let data = await request.get(url, {FCODE: code})
-                this.rowData.filter(element => {
-                    if (element.code === code) {
-                        element.twentyData = data.Datas
-                    }
+                let rowObj = { code, name, todayRate }
+                data.Datas.forEach((item, i) => {
+                    rowObj['JZZZL-' + (21 - i)] = item.JZZZL
                 })
-                console.log(this.rowData)
-                this.queryTodayFund()
+                rowObj.datas = data.Datas // 备份原始数据
+                this.rowData2.push(rowObj)
             },
             // 查询指定基金 当前价格
             async queryTodayFund(code) {
-                let data = await request.jsonp(code + '.js', {}, 'jsonpgz')
-                console.log(data)
+                let res = await request.jsonp(code + '.js', {}, 'jsonpgz')
+                let data = JSON.parse(JSON.stringify(this.rowData)) || []
+                data.forEach(item => {
+                    if (item.code === code) {
+                        item.curPrice = res.gsz
+                        item.floatRate = res.gszzl
+                    }
+                })
+                this.rowData = data
+/*                 let itemsToUpdate = []
+                this.gridOptions.api.forEachNodeAfterFilterAndSort((rowNode, index) => {
+                    let { data } = rowNode
+                    if (data.code === code) {
+                        data.curPrice = res.gsz
+                        data.floatRate = res.gszzl
+                        itemsToUpdate.push(data)
+                    } else {
+                        return
+                    }
+                })
+                this.gridOptions.api.updateRowData({update: itemsToUpdate}) */
             },
             async queryFundList() {
                 let data = await request.get('/fund/holdfund/list', {})
                 if (data.success === true) {
                     this.rowData = data.data || []
                     this.total = data.data.length || 0
-                    this.rowData.forEach(element => {
+                    let _self = this
+                    this.rowData.forEach((element, i) => {
                         if (element.code) {
-                            this.queryFund(element.code)
-                            this.queryTodayFund(element.code)
+                            /* setTimeout(((code) => {
+                                _self.queryTodayFund(code)
+                            })(element.code), 1) */
+
+                            (function(code) {
+                                setTimeout(() => {
+                                    _self.queryTodayFund(code)
+                                    console.log(code)
+                                }, i*100)
+                            })(element.code)
                         }
                     })
+/* 
+                    for(let i = 0; i < this.rowData.length; i++) {
+                        (function(code) {
+                                setTimeout(() => {
+                                    // _self.queryTodayFund(code)
+                                    console.log(code)
+                                }, 2000)
+                            })(element.code)
+                    } */
                 } else {
                     this.$Message.error(data.msg)
                 }
@@ -258,10 +349,16 @@
             },
             createColumnDefs() {
                 this.columnDefs = [{
+                    field: '',
+                    headerName: '',
+                    headerCheckboxSelection: true,
+                    checkboxSelection: true,
+                    width: 40
+                }, {
                     headerName: "序号",
                     field: "number",
                     minWidth: 60,
-                    width: 60,
+                    // width: 60,
                     cellRenderer: function(params) {
                         return params.rowIndex + 1
                     }
@@ -272,7 +369,13 @@
                 }, {
                     headerName: "购买平台",
                     field: "buySource",
-                    minWidth: 80
+                    minWidth: 80,
+                    cellRenderer: function(params) {
+                        return '<span style="color: ' + params.color + '">' + params.value + '</span>'
+                    },
+                    cellRendererParams: { // 给当前单元格添加参数
+                        color: 'red'
+                    }
                 }, {
                     headerName: "名称",
                     field: "name",
@@ -286,12 +389,12 @@
                     field: "buyPrice",
                     minWidth: 80
                 }, {
-                    headerName: "买入金额",
-                    field: "buyMoney",
-                    minWidth: 80
-                }, {
                     headerName: "手续费",
                     field: "rateFee",
+                    minWidth: 80
+                }, {
+                    headerName: "买入金额",
+                    field: "buyMoney",
                     minWidth: 80
                 }, {
                     headerName: "买入时间",
@@ -299,6 +402,192 @@
                     minWidth: 140,
                     cellRenderer: function(params) {
                         return getDataFormat(new Date(params.value), 'yyyy-MM-dd hh:mm:ss')
+                    }
+                }, {
+                    headerName: "当前价格",
+                    field: "curPrice",
+                    minWidth: 80,
+                    cellRenderer: params => {
+                        // console.log(params)
+                        return params.data.curPrice || 0
+                    }
+                }, {
+                    headerName: "当前涨跌幅",
+                    field: "floatRate",
+                    minWidth: 80,
+                    cellRenderer: disColor,
+                    cellStyle: function(params) {
+                        return {border: '1px solid lightblue'}
+                    }
+                }, {
+                    headerName: "当日盈亏",
+                    field: "todayMoney",
+                    minWidth: 80,
+                    cellRenderer: disColor,
+                    cellStyle: function(params) {
+                        return {border: '1px solid lightblue'}
+                    }
+                }, {
+                    headerName: "持仓总盈亏",
+                    field: "realTotalMoney",
+                    minWidth: 80,
+                    cellRenderer: params => {
+                        let {buyMoney = 0, buyPrice = 0, rateFee = 0, curPrice = 0} = params.data
+                        let realBuy = calc.sub(buyMoney, rateFee)
+                        let diff = calc.sub(curPrice, buyPrice)
+                        return calc.mul(realBuy, diff)
+                    },
+                    cellStyle: function(params) {
+                        return {border: '1px solid lightblue'}
+                    }
+                }]
+            },
+            createColumnDefs2() {
+                this.columnDefs2 = [{
+                    headerName: "基金名称",
+                    field: "name",
+                    minWidth: 160
+                }, {
+                    headerName: "基金编码",
+                    field: "code",
+                    minWidth: 80
+                }, {
+                    headerName: "15天前",
+                    field: "JZZZL-15",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "14天前",
+                    field: "JZZZL-14",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "13天前",
+                    field: "JZZZL-13",
+                    minWidth: 80,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "12天前",
+                    field: "JZZZL-12",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "11天前",
+                    field: "JZZZL-11",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "10天前",
+                    field: "JZZZL-10",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "9天前",
+                    field: "JZZZL-9",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "8天前",
+                    field: "JZZZL-8",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "7天前",
+                    field: "JZZZL-7",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "6天前",
+                    field: "JZZZL-6",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "5天前",
+                    field: "JZZZL-5",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "4天前",
+                    field: "JZZZL-4",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "3天前",
+                    field: "JZZZL-3",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "2天前",
+                    field: "JZZZL-2",
+                    minWidth: 60,
+                    width: 60,
+                    cellRenderer: disColor
+                }, {
+                    headerName: "昨天收益率",
+                    field: "JZZZL-1",
+                    minWidth: 100,
+                    width: 100,
+                    cellRenderer: disColor
+                }, {
+                    headerName: '今日涨跌幅',
+                    field: 'todayRate',
+                    minWidth: 100,
+                    cellStyle: function(params) {
+                        return {border: '1px solid lightblue'}
+                    },
+                    cellRenderer: disColor
+                }, {
+                    headerName: "近一周浮动",
+                    field: "-1",
+                    minWidth: 100,
+                    cellRenderer: function(params) {
+                        let res = 0
+                        let data = params.data.datas
+                        for (let i = data.length - 1; i > -1; i--) {
+                            if (data.length - i < 6) {
+                                res += Number(data[i].JZZZL)
+                            }
+                        }
+                        return '<span>' + res.toFixed(2) + '</span>'
+                    }
+                }, {
+                    headerName: "近2周浮动",
+                    field: "-21",
+                    minWidth: 100,
+                    cellRenderer: function(params) {
+                        let res = 0
+                        let data = params.data.datas
+                        for (let i = data.length - 1; i > -1; i--) {
+                            if (data.length - i < 11) {
+                                res += Number(data[i].JZZZL)
+                            }
+                        }
+                        return '<span>' + res.toFixed(2) + '</span>'
+                    }
+                }, {
+                    headerName: "近一月浮动",
+                    field: "-3",
+                    minWidth: 100,
+                    cellRenderer: function(params) {
+                        let res = 0
+                        let data = params.data.datas
+                        for (let i = 0; i < data.length; i++) {
+                            res += Number(data[i].JZZZL)
+                        }
+                        return '<span>' + res.toFixed(2) + '</span>'
                     }
                 }]
             }
