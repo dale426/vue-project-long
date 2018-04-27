@@ -256,18 +256,20 @@
             // 查询指定基金 当前价格
             async queryTodayFund(code) {
                 let res = await request.jsonp(code + '.js', {}, 'jsonpgz')
-                let data = JSON.parse(JSON.stringify(this.rowData)) || []
+/*                 let data = JSON.parse(JSON.stringify(this.rowData)) || []
+                // console.log('调用后', code, res)
+
                 data.forEach(item => {
-                    if (item.code === code) {
+                    if (item.code === res.fundcode) {
                         item.curPrice = res.gsz
                         item.floatRate = res.gszzl
                     }
                 })
-                this.rowData = data
-/*                 let itemsToUpdate = []
+                this.rowData = data */
+                let itemsToUpdate = []
                 this.gridOptions.api.forEachNodeAfterFilterAndSort((rowNode, index) => {
                     let { data } = rowNode
-                    if (data.code === code) {
+                    if (data.code === res.fundcode) {
                         data.curPrice = res.gsz
                         data.floatRate = res.gszzl
                         itemsToUpdate.push(data)
@@ -275,7 +277,7 @@
                         return
                     }
                 })
-                this.gridOptions.api.updateRowData({update: itemsToUpdate}) */
+                this.gridOptions.api.updateRowData({update: itemsToUpdate})
             },
             async queryFundList() {
                 let data = await request.get('/fund/holdfund/list', {})
@@ -285,27 +287,22 @@
                     let _self = this
                     this.rowData.forEach((element, i) => {
                         if (element.code) {
-                            /* setTimeout(((code) => {
-                                _self.queryTodayFund(code)
-                            })(element.code), 1) */
-
                             (function(code) {
                                 setTimeout(() => {
                                     _self.queryTodayFund(code)
-                                    console.log(code)
-                                }, i*100)
+                                    // console.log('调用前', code)
+                                }, i)
                             })(element.code)
                         }
                     })
-/* 
-                    for(let i = 0; i < this.rowData.length; i++) {
-                        (function(code) {
-                                setTimeout(() => {
-                                    // _self.queryTodayFund(code)
-                                    console.log(code)
-                                }, 2000)
-                            })(element.code)
-                    } */
+/* for(let i = 0; i < this.rowData.length; i++) {
+    (function(code) {
+            setTimeout(() => {
+                // _self.queryTodayFund(code)
+                console.log(code)
+            }, 2000)
+        })(element.code)
+} */
                 } else {
                     this.$Message.error(data.msg)
                 }
@@ -353,7 +350,8 @@
                     headerName: '',
                     headerCheckboxSelection: true,
                     checkboxSelection: true,
-                    width: 40
+                    width: 40,
+                    minWidth: 40
                 }, {
                     headerName: "序号",
                     field: "number",
@@ -417,15 +415,18 @@
                     minWidth: 80,
                     cellRenderer: disColor,
                     cellStyle: function(params) {
-                        return {border: '1px solid lightblue'}
+                        return {border: '1px solid lightpurple'}
                     }
                 }, {
                     headerName: "当日盈亏",
                     field: "todayMoney",
                     minWidth: 80,
-                    cellRenderer: disColor,
+                    cellRenderer: function(params) {
+                        let {floatRate = 0, buyMoney = 0, rateFee = 0} = params.data
+                        return calc.mul(calc.sub(buyMoney, rateFee), floatRate) / 100
+                    },
                     cellStyle: function(params) {
-                        return {border: '1px solid lightblue'}
+                        return {border: '1px solid #f1974e'}
                     }
                 }, {
                     headerName: "持仓总盈亏",
@@ -600,5 +601,6 @@
     display: inline-block;
     top: 2px;
     right: 7px;
+    
 }
 </style>
