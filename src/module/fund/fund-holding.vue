@@ -265,13 +265,6 @@
                 })
                 this.rowData = data
             },
-            async resolveWithArg(code) {
-                return await request.jsonp(code + '.js', {}, 'jsonpgz')
-  /*               return new Promise(resolve => setTimeout(() => {
-                    console.log('resolving with ' + arg)
-                    resolve(arg)
-                }, 1000)) */
-            },
             async queryFundList() {
                 let data = await request.get('/fund/holdfund/list', {})
                 if (data.success === true) {
