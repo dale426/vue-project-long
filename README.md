@@ -8,8 +8,8 @@ mongodb 备份方法 ：
 
 mongodb 备份 恢复方法 ： 
  1. 启动mongod
- 2. 打开mongodb命令控制台：
- code： mongo
+ 2. 打开mongodb安装路径
+ > 直接打开控制台： 【不在mongo控制台中】
 
  3. 备份数据库： 
 > mongodump -h 127.0.0.1:27017 -d myfund -o E:\long_project\vue-project-long\db
