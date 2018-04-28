@@ -130,7 +130,7 @@
         if (value.toString().includes('-')) {
             color = 'green'
         }
-        return '<span style="color:' + color + '">' + value + '</span>'
+        return '<span style="color:' + color + '">' + value + '%</span>'
     }
     export default {
         name: 'fundHolding',
@@ -256,53 +256,40 @@
             // 查询指定基金 当前价格
             async queryTodayFund(code) {
                 let res = await request.jsonp(code + '.js', {}, 'jsonpgz')
-/*                 let data = JSON.parse(JSON.stringify(this.rowData)) || []
-                // console.log('调用后', code, res)
-
+                let data = JSON.parse(JSON.stringify(this.rowData)) || []
                 data.forEach(item => {
-                    if (item.code === res.fundcode) {
+                    if (item.code === code) {
                         item.curPrice = res.gsz
                         item.floatRate = res.gszzl
                     }
                 })
-                this.rowData = data */
-                let itemsToUpdate = []
-                this.gridOptions.api.forEachNodeAfterFilterAndSort((rowNode, index) => {
-                    let { data } = rowNode
-                    if (data.code === res.fundcode) {
-                        data.curPrice = res.gsz
-                        data.floatRate = res.gszzl
-                        itemsToUpdate.push(data)
-                    } else {
-                        return
-                    }
-                })
-                this.gridOptions.api.updateRowData({update: itemsToUpdate})
+                this.rowData = data
+            },
+            async resolveWithArg(code) {
+                return await request.jsonp(code + '.js', {}, 'jsonpgz')
+  /*               return new Promise(resolve => setTimeout(() => {
+                    console.log('resolving with ' + arg)
+                    resolve(arg)
+                }, 1000)) */
             },
             async queryFundList() {
                 let data = await request.get('/fund/holdfund/list', {})
                 if (data.success === true) {
                     this.rowData = data.data || []
                     this.total = data.data.length || 0
-                    let _self = this
-                    this.rowData.forEach((element, i) => {
-                        if (element.code) {
-                            (function(code) {
-                                setTimeout(() => {
-                                    _self.queryTodayFund(code)
-                                    // console.log('调用前', code)
-                                }, i)
-                            })(element.code)
-                        }
-                    })
-/* for(let i = 0; i < this.rowData.length; i++) {
-    (function(code) {
-            setTimeout(() => {
-                // _self.queryTodayFund(code)
-                console.log(code)
-            }, 2000)
-        })(element.code)
-} */
+
+                    this.rowData.reduce(async(lastPromise, arg) => {
+                        await lastPromise
+                        let result = await request.jsonp(arg.code + '.js', {}, 'jsonpgz')
+                        let data = JSON.parse(JSON.stringify(this.rowData)) || []
+                        data.forEach(item => {
+                            if (item.code === arg.code) {
+                                item.curPrice = result.gsz
+                                item.floatRate = result.gszzl
+                            }
+                        })
+                        this.rowData = data
+                    }, Promise.resolve())
                 } else {
                     this.$Message.error(data.msg)
                 }
@@ -351,7 +338,8 @@
                     headerCheckboxSelection: true,
                     checkboxSelection: true,
                     width: 40,
-                    minWidth: 40
+                    minWidth: 40,
+                    maxWidth: 40
                 }, {
                     headerName: "序号",
                     field: "number",
@@ -367,13 +355,7 @@
                 }, {
                     headerName: "购买平台",
                     field: "buySource",
-                    minWidth: 80,
-                    cellRenderer: function(params) {
-                        return '<span style="color: ' + params.color + '">' + params.value + '</span>'
-                    },
-                    cellRendererParams: { // 给当前单元格添加参数
-                        color: 'red'
-                    }
+                    minWidth: 80
                 }, {
                     headerName: "名称",
                     field: "name",
@@ -393,7 +375,13 @@
                 }, {
                     headerName: "买入金额",
                     field: "buyMoney",
-                    minWidth: 80
+                    minWidth: 80,
+                    cellRenderer: function(params) {
+                        return '<span style="color: ' + params.color + '">' + params.value + '</span>'
+                    },
+                    cellRendererParams: { // 给当前单元格添加参数
+                        color: 'red'
+                    }
                 }, {
                     headerName: "买入时间",
                     field: "buyTime",
@@ -422,11 +410,13 @@
                     field: "todayMoney",
                     minWidth: 80,
                     cellRenderer: function(params) {
-                        let {floatRate = 0, buyMoney = 0, rateFee = 0} = params.data
-                        return calc.mul(calc.sub(buyMoney, rateFee), floatRate) / 100
+                        let {buyMoney = 0, buyPrice = 0, rateFee = 0, floatRate = 0} = params.data
+                        let realBuy = calc.sub(buyMoney, rateFee) // 实际购买金额
+                        let buyNum = calc.div(realBuy, buyPrice) // 份额
+                        return (calc.mul(buyNum, floatRate) / 100).toFixed(4) // 份额*今日涨跌幅
                     },
                     cellStyle: function(params) {
-                        return {border: '1px solid #f1974e'}
+                        return {background: '#FFFFF0'}
                     }
                 }, {
                     headerName: "持仓总盈亏",
@@ -435,11 +425,12 @@
                     cellRenderer: params => {
                         let {buyMoney = 0, buyPrice = 0, rateFee = 0, curPrice = 0} = params.data
                         let realBuy = calc.sub(buyMoney, rateFee)
-                        let diff = calc.sub(curPrice, buyPrice)
-                        return calc.mul(realBuy, diff)
+                        let buyNum = calc.div(realBuy, buyPrice)
+                        let diff = calc.sub(calc.mul(buyNum, curPrice), buyMoney)
+                        return diff.toFixed(4)
                     },
                     cellStyle: function(params) {
-                        return {border: '1px solid lightblue'}
+                        return {borderBottom: '1px solid #f1974e', background: '#F0FFF0', fontSize: "16px", fontWeight: '500'}
                     }
                 }]
             },
@@ -455,86 +446,86 @@
                 }, {
                     headerName: "15天前",
                     field: "JZZZL-15",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "14天前",
                     field: "JZZZL-14",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "13天前",
                     field: "JZZZL-13",
                     minWidth: 80,
-                    width: 60,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "12天前",
                     field: "JZZZL-12",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "11天前",
                     field: "JZZZL-11",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "10天前",
                     field: "JZZZL-10",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "9天前",
                     field: "JZZZL-9",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "8天前",
                     field: "JZZZL-8",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "7天前",
                     field: "JZZZL-7",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "6天前",
                     field: "JZZZL-6",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "5天前",
                     field: "JZZZL-5",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "4天前",
                     field: "JZZZL-4",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "3天前",
                     field: "JZZZL-3",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "2天前",
                     field: "JZZZL-2",
-                    minWidth: 60,
-                    width: 60,
+                    minWidth: 80,
+                    width: 80,
                     cellRenderer: disColor
                 }, {
                     headerName: "昨天收益率",
