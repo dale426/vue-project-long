@@ -254,7 +254,7 @@
                 this.rowData2.push(rowObj)
             },
             // 查询指定基金 当前价格
-            async queryTodayFund(code) {
+/*             async queryTodayFund(code) {
                 let res = await request.jsonp(code + '.js', {}, 'jsonpgz')
                 let data = JSON.parse(JSON.stringify(this.rowData)) || []
                 data.forEach(item => {
@@ -264,7 +264,7 @@
                     }
                 })
                 this.rowData = data
-            },
+            }, */
             async queryFundList() {
                 let data = await request.get('/fund/holdfund/list', {})
                 if (data.success === true) {
@@ -274,6 +274,7 @@
                     this.rowData.reduce(async(lastPromise, arg) => {
                         await lastPromise
                         let result = await request.jsonp(arg.code + '.js', {}, 'jsonpgz')
+                        // 查询指定基金 当前价格
                         let data = JSON.parse(JSON.stringify(this.rowData)) || []
                         data.forEach(item => {
                             if (item.code === arg.code) {
