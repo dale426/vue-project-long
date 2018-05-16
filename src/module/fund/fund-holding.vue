@@ -11,9 +11,9 @@
                     <i class="icon iconfont icon-addition"></i>
                     <div>新增</div>
                 </li>
-                <li class="btn-group-single">
+                <li class="btn-group-single" @click="btnPv">
                     <i class="icon iconfont icon-edit"></i>
-                    <div>修改</div>
+                    <div>按钮pv</div>
                 </li>
                 <li class="btn-group-single">
                     <i class="icon iconfont icon-delete"></i>
@@ -241,6 +241,11 @@
             },
             onSelectionChanged(params) {
                 // console.log("onSelectionChanged", params)
+            },
+            async btnPv() {
+                let url = 'api/website/pv'
+                let params = {key: 'test', name:'btn29', route: window.location.href, type: '2'}
+                let data = await request.get(url, params)
             },
             // 查询指定基金 近20个交易日的数据
             async queryTwentyFund(code = '', name = '', todayRate = '') {

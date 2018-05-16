@@ -28,15 +28,20 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/api/': {
+        target: 'http://127.0.0.1:8000',
+        pathRewrite: { '^/column': '/column' },
+        changeOrigin: true
+      },
       '/fund/': {
-          target: 'http://127.0.0.1:3000',
-          pathRewrite: { '^/column': '/column' },
-          changeOrigin: true
+        target: 'http://127.0.0.1:3000',
+        pathRewrite: { '^/column': '/column' },
+        changeOrigin: true
       },
       '/FundMApi/': {
-          target: 'http://61.129.249.53',
-          pathRewrite: { '^/column': '/column' },
-          changeOrigin: true
+        target: 'http://61.129.249.53',
+        pathRewrite: { '^/column': '/column' },
+        changeOrigin: true
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
