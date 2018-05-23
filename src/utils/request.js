@@ -25,7 +25,7 @@ function dealFundApi(params = {}) {
 axios.interceptors.request.use(
     config => {
         // 解决IE中请求缓存的问题
-        config.headers.common['If-Modified-Since'] = '0'
+        // config.headers.common['If-Modified-Since'] = '0'
         return config
     },
     err => {
