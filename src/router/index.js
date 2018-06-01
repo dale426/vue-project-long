@@ -40,6 +40,11 @@ export default new Router({
                     path: '/fundhold',
                     name: 'fundHolding',
                     component: r => require.ensure([], () => r(require('../module/fund/Fund-holding.vue')), 'Test')
+                },
+                {
+                    path: '/preimg',
+                    name: 'preimg',
+                    component: r => require.ensure([], () => r(require('../module/demo/ImageLoad.vue')), 'Test')
                 }
             ]
         }

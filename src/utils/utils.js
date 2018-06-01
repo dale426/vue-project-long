@@ -1,7 +1,7 @@
 /**
  * Created by Kevin Zhang on 2017/10/17.
  */
-import moment from 'moment'
+// import moment from 'moment'
 // import {devAcl, onlineAcl} from '/share/js/utils/const'
 
 //  获取url中的参数
