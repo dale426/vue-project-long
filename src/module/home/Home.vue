@@ -1,6 +1,6 @@
 <template>
     <div class="banner">
-        <ul :style="imageBox" class="clearfix">
+        <ul ref="imageWrap" :style="imageBox" class="clearfix">
             <li><a href="#"><img src="../../assets/images/tb8.jpg" alt=""></a></li>
             <li><a href="#"><img src="../../assets/images/tb1.jpg" alt=""></a></li>
             <li><a href="#"><img src="../../assets/images/tb2.jpg" alt=""></a></li>
@@ -22,7 +22,8 @@
             <li></li>
             <li></li>
         </ul>
-        <Button @click="btnNext" type="primary">下一张</Button>
+        <Button @click="btnPre" type="primary">上一张</Button>
+        <Button @click="btnNext" type="primary">下一张</Button> 
     </div>
 </template>
 <script>
@@ -42,11 +43,13 @@ export default {
     },
     mounted() {
         this.addTransition()
-        setInterval(() => {
+        this.addTranslationEnd()
+        /* setInterval(() => {
             this.btnNext()
-        }, 4000)
+        }, 4000) */
     },
     methods: {
+        
         // 位置滚动
         setTranslateX(translateX) {
             this.imageBox = {
@@ -75,17 +78,36 @@ export default {
         btnNext() {
             this.imgIndex++
             let index = this.imgIndex
-            if (index === 2) {
+            if (index === 2 || index === 9) {
                 this.addTransition()
             }
             this.setTranslateX('-' + index * 10 + '%')
-            setTimeout(() => {
-                if (this.imgIndex === 9) {
-                    this.setTranslateX('-' + 10 + '%')
+            console.log('nex - index', this.imgIndex)
+        },
+        // 上一张
+        btnPre() {
+            this.imgIndex--
+            let index = this.imgIndex
+            if (index === 7 || index === 0) {
+                this.addTransition()
+            }
+            this.setTranslateX('-' + index * 10 + '%')
+            console.log('pre - index', this.imgIndex)
+        },
+        // 绑定translationEnd事件
+        addTranslationEnd() {
+            this.$refs.imageWrap.addEventListener('transitionend', () => {
+                if (this.imgIndex >= 9) {
                     this.imgIndex = 1
                     this.removeTransition()
+                    this.setTranslateX('-' + 10 + '%')
+                } else if (this.imgIndex <= 0) {
+                    this.imgIndex = 8
+                    this.removeTransition()
+                    this.setTranslateX('-' + 80 + '%')
                 }
-            }, 600)
+                console.log('event - index', this.imgIndex)
+            })
         },
         clickHandle() {
             let num = 0
