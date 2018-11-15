@@ -49,6 +49,10 @@ export default new Router({
                     path: '/fund/select',
                     name: 'selfSelect',
                     component: r => require.ensure([], () => r(require('../module/fund/Fund-select.vue')), 'Selectself')
+                }, {
+                    path: '/ivu/select',
+                    name: 'ivuselect',
+                    component: r => require.ensure([], () => r(require('../module/other/Ivu-select.vue')), 'Selectself')
                 }]
         }]
 })

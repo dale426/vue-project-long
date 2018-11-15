@@ -56,7 +56,7 @@ export default {
             this.formItem.money = ''
         },
         reduceMoney(money) {
-            console.log("money", money)
+            console.log("money", this)
             this.tempMoney -= Number(money)
         }
     }
