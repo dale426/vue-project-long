@@ -34,7 +34,10 @@ export default {
     .jump{
         display: block;
         color: #fff;
-        margin-top: 60px;
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        transform: translateX(-50%);
         font-style: italic;
     }
     .line{

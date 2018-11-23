@@ -44,9 +44,9 @@ export default {
     mounted() {
         this.addTransition()
         this.addTranslationEnd()
-        /* setInterval(() => {
+        setInterval(() => {
             this.btnNext()
-        }, 4000) */
+        }, 4000)
     },
     methods: {
         
@@ -123,7 +123,7 @@ export default {
 .banner {
   position: relative;
   overflow: hidden;
-  width: 50%;
+//   width: 50%;
   ul:first-child {
     width: 1000%;
 

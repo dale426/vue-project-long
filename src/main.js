@@ -20,6 +20,20 @@ import './style/ag-grid/ag-theme-balham.css'
 // import '../node_modules/ag-grid/dist/styles/ag-theme-balham.css'
 var _ = require('lodash')
 
+import hljs from 'highlight.js';
+// import hljs from 'highlight.js/lib/highlight';
+// import javascript from 'highlight.js/lib/languages/javascript';
+import 'highlight.js/styles/github.css';
+
+Vue.directive('hljs', {
+    inserted: function(el) {
+        let blocks = el.querySelectorAll('pre code');
+        console.log('blocks', blocks);
+        
+        Array.prototype.forEach.call(blocks, hljs.highlightBlock);
+      }
+}
+)
 Vue.prototype.$http = axios
 Vue.config.productionTip = false
 // Vue.use(VueRouter);
@@ -27,7 +41,7 @@ Vue.use(iView)
 Vue.component('AgGridVue', AgGridVue)
 
 /* eslint-disable no-new */
-new Vue({
+window.vv = new Vue({
     el: '#app',
     router,
     template: '<App/>', // 声明组件

@@ -52,7 +52,11 @@ export default new Router({
                 }, {
                     path: '/ivu/select',
                     name: 'ivuselect',
-                    component: r => require.ensure([], () => r(require('../module/other/Ivu-select.vue')), 'Selectself')
+                    component: r => require.ensure([], () => r(require('../module/other/Ivu-select.vue')), 'ivuselect')
+                }, {
+                    path: '/hljs/class',
+                    name: 'Class',
+                    component: r => require.ensure([], () => r(require('../module/hljs/class.vue')), 'Class')
                 }]
         }]
 })
