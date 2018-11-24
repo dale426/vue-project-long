@@ -28,8 +28,7 @@ import 'highlight.js/styles/github.css';
 Vue.directive('hljs', {
     inserted: function(el) {
         let blocks = el.querySelectorAll('pre code');
-        console.log('blocks', blocks);
-        
+        // console.log('blocks', blocks);
         Array.prototype.forEach.call(blocks, hljs.highlightBlock);
       }
 }

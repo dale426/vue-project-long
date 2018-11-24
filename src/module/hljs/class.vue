@@ -1,9 +1,10 @@
 <template>
-    <div>
+    <div class="content">
         <div>
-            <h1>Class，详见console</h1>
+            <h1>class类(详见console)</h1>
 <pre v-hljs>
     <code > 
+<h3><em>类</em></h3>
     export class example {
         constructor(x, y) {
             this.x = x;
@@ -22,28 +23,71 @@
         mul(x,y) {
             return x*y
         }
+        static div(a, b) {
+            return a / b;
+        }
     }
 
-<h2> 运行 </h2>
+
+<h3><strong>1. 类生成实例</strong></h3>
+import { example, calc } from '../../utils/class_example.js';
+
+  /**
+    * class example类，【假装相当于是一个构造函数】
+    * 这个类【假构造函数】是有另外一个真的构造函数 constructor生成
+    * 这个类【假构造函数】中的方法其实是挂载在自身prototype上的；
+    * 
+    * 当用new 这个类生成实例时
+    * var 实例myExample = new 这个类【假的构造函数】
+    * 实例myExample能够调用原型中(原型指的是构造函数的prototype对象)的方法，也就是这个类【假的构造函数】的prototype上的方法
+    * example.prototype === myExample.__proto__   // true
+    */
+
+    let myExample = new example(22, 33);
+
+    console.log('myExample', myExample);
+    console.log('example.prototype', example.prototype);
+
+    //实例的原型指向构造函数的prototype
+    console.log('example.prototype === myExample.__proto__ :', example.prototype === myExample.__proto__);  // true
+|----------------------------------------------------------------------------------------------------------------------------------------------|
+|   //实例的constructor指向他的构造函数                                                                                                          |
+|   console.log('myExample.constructor === example', myExample.constructor === example); // true                                               |
+|                                                                                                                                              |
+|   //实例的constructor 指向 他的构造函数prototype上的constructor                                                                                |
+|   console.log('myExample.constructor === example.prototype.constructor', myExample.constructor === example.prototype.constructor); //true    |
+|                                                                                                                                              |
+|   // 类prototype上的构造函数 指向 的是 自身                                                                                                    |      
+|   console.log('example.prototype.constructor === example', example.prototype.constructor === example); // true                               |
+|----------------------------------------------------------------------------------------------------------------------------------------------|
+
+
+    <h3><b>2. 继承的类生成的实例</b></h3>
+    import { example, calc } from '../../utils/class_example.js';
 
     let myClass = new calc(10, 56);
     console.log('myClass', myClass);
+    console.log( 'myClass.__proto__ === calc.prototype', myClass.__proto__ === calc.prototype) //true
+    console.log('calc.__proto__ === example.prototype', calc.__proto__ === example); // true  类的继承， 它的原型指向继承的那个类，而非那个类的prototype
 
-    let add = myClass.add(200, 89)
-    console.log('myClass', add);
+    <h3><b>3. 类上面的静态方法</b></h3>
+    import { calc } from '../../utils/class_example.js';
+
+    let num = calc.div(100, 20);
+    console.log('num', num); // 5
     </code>
 </pre>
 </div>
 
 <pre v-hljs>
     <code class="html"> 
-            <h1>LALAL</h1>
+    <h1>LALAL</h1>
     </code>
 </pre>
     </div>
 </template>
 <script>
-import { calc } from '../../utils/class_example.js';
+import { example, calc } from '../../utils/class_example.js';
 export default {
     data() {
         return {
@@ -51,14 +95,38 @@ export default {
         }
     },
     mounted() {
+        this.htmlToText();
+
+        /**
+         * class example类，【假装相当于是一个构造函数】
+         * 这个类【假构造函数】是有另外一个真的构造函数 constructor生成
+         * 这个类【假构造函数】中的方法其实是挂载在自身prototype上的；
+         * 
+         * 当用new 这个类生成实例时
+         * var 实例myExample = new 这个类【假的构造函数】
+         * 实例myExample能够调用原型中(原型指的是构造函数的prototype对象)的方法，也就是这个类【假的构造函数】的prototype上的方法
+         * example.prototype === myExample.__proto__   // true
+         */
+        let myExample = new example(22, 33);
+
+        console.log('myExample', myExample);
+        console.log('example.prototype', example.prototype);
+        console.log('myExample.constructor === example', myExample.constructor === example); // 实例的constructor指向他的构造函数
+        console.log('myExample.constructor === example.prototype.constructor', myExample.constructor === example.prototype.constructor); // 实例的constructor 指向 他的构造函数prototype上的constructor
+        
+        console.log('example.prototype.constructor === example', example.prototype.constructor === example); // 类prototype上的构造函数 指向 的是 自身
+        console.log('example.prototype === myExample.__proto__ :', example.prototype === myExample.__proto__);  // true
+
 
         let myClass = new calc(10, 56);
         console.log('myClass', myClass);
+        console.log( 'myClass.__proto__ === calc.prototype', myClass.__proto__ === calc.prototype) //true
+        console.log('calc.__proto__ === example.prototype', calc.__proto__ === example); // true  类的继承， 它的原型指向继承的那个类，而非那个类的prototype
 
-        let add = myClass.add(200, 89)
-        console.log('myClass', add);
-
-        this.htmlToText();
+        console.log('---------------------------------------------------');
+        let num = calc.div(100, 20) // 类上面的静态方法
+        console.log('num', num); // 5
+        
 
     },
     methods: {
@@ -76,5 +144,9 @@ export default {
 }
 </script>
 <style lang="less">
+    .content{
+        font-size: 14px;
+        padding: 20px;
+    }
 </style>
 

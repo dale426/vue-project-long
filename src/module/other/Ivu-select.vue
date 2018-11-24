@@ -37,11 +37,14 @@ export default {
             mulLabel: [],
             loading2: false,
             options2: [],
-            list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming']
+            list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'],
+            list2: []
+
         }
     },
     mounted() {
         this.queryName();
+        // this.query();
     },
     methods: {
         queryName() {
@@ -83,13 +86,18 @@ export default {
             } else {
                 this.options2 = [];
             }
+        },
+        async query() {
+            let data = await request.get('http://ys.dev02.51juban.cn/ttms/v1/ttms_project/query?page=1&size=2000&queryType=1&_=1543048209104');
+            console.log('data', data);
+            
         }
     }
 }
 </script>
 <style lang="less">
-    .wrap{
-        width: 600px;
-        padding: 30px;
-    }
+.wrap {
+  width: 600px;
+  padding: 30px;
+}
 </style>

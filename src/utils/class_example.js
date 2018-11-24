@@ -15,4 +15,7 @@ export class calc extends example {
     mul(x,y) {
         return x*y
     }
+    static div(a, b) {
+        return a / b;
+    }
 }
