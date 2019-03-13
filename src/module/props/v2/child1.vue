@@ -26,8 +26,6 @@ export default {
   },
   created() {
     console.log('child created');
-    
-    this.changeData()
   },
   mounted() {
     console.log('this.data', this.data);
@@ -42,13 +40,13 @@ export default {
     }
   },
   watch: {
-/*     data: {
+    data: {
       handler(newVal) {
         this.changeData();
       },
       immediate: true,
       deep: true
-    } */
+    }
   },
 }
 </script>

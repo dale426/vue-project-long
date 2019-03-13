@@ -12,12 +12,17 @@
                 <childv2 :data="datalist"></childv2>
             </div>
         </div>
+        <div>
+          <h1>iviewRest.表单使用</h1>
+          <iviewRest></iviewRest>
+        </div>
     </div>
 </template>
 
 <script>
 import childv1 from "./child1.vue";
 import childv2 from "./child2.vue";
+import iviewRest from './iviewRest.vue';
 export default {
     name: 'parent',
     data() {
@@ -27,7 +32,7 @@ export default {
         }
     },
     components: {
-        childv1, childv2
+        childv1, childv2, iviewRest
     },
     beforeCreate() {
         console.log('parent beforeCreated');
