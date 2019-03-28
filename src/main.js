@@ -13,6 +13,7 @@ import 'src/style/user.less'
 
 import 'src/style/iview/index.less'  // 引入iview本地样式
 import axios from 'axios'
+import EasyScroll from '@/components/scrollbar/index';
 // 引入ag-grid样式
 import './style/ag-grid/ag-grid.css'
 import './style/ag-grid/ag-theme-balham.css'
@@ -38,6 +39,10 @@ Vue.config.productionTip = false
 // Vue.use(VueRouter);
 Vue.use(iView)
 Vue.component('AgGridVue', AgGridVue)
+
+
+Vue.use(EasyScroll);
+
 
 /* eslint-disable no-new */
 window.vv = new Vue({
