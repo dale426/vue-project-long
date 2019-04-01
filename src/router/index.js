@@ -53,9 +53,9 @@ export default new Router({
                     component: r => require.ensure([], () => r(require('../module/fund/Fund-select.vue')), 'Selectself')
                 }, {
                     // iview多选表单、tabs render方法
-                    path: '/ivu/select',
+                    path: '/table',
                     name: 'ivuselect',
-                    component: r => require.ensure([], () => r(require('../module/other/Ivu-select.vue')), 'ivuselect')
+                    component: r => require.ensure([], () => r(require('../module/other/Table.vue')), 'ivuselect')
                 }, {
                     // vue父子组件传值
                     path: '/v2parent',

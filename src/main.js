@@ -48,9 +48,11 @@ Vue.use(EasyScroll);
 window.vv = new Vue({
     el: '#app',
     router,
-    template: '<App/>', // 声明组件
+    render: h => h(App),
+
+/*     template: '<App/>', // 声明组件
     components: {
         App
-    }
+    } */
 })
 

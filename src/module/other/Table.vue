@@ -1,83 +1,18 @@
 <template>
   <Row class="wrap">
-    <div style="min-height: 120px;">
-      <Col span="4" style="padding-right:10px">
-        <Select
-          v-model="model13"
-          filterable
-          remote
-          :remote-method="remoteMethod1"
-          :loading="loading1"
-        >
-          <Option
-            v-for="(option, index) in options1"
-            :value="option.value"
-            :key="index"
-          >{{option.label}}</Option>
-        </Select>
-      </Col>
-      <Col span="5">
-        <Select
-          v-model="model14"
-          multiple
-          filterable
-          remote
-          :label="mulLabel"
-          :remote-method="remoteMethod2"
-          :loading="loading2"
-        >
-          <Option
-            v-for="(option, index) in options2"
-            :value="option.value"
-            :key="index"
-          >{{option.label}}</Option>
-        </Select>
-      </Col>
-      <Col span="5">
-        <div style="border: 1px solid red;">
-          <div v-if="index === 0" v-for="(item, index) in doubleList" :key="index">{{item.name}}</div>
-        </div>
-
-        <ul style="border: 1px solid blue">
-          <li v-if="index > 0" v-for="(item, index) in doubleList" :key="index">{{item.name}}</li>
-        </ul>
-        <Button type="primary" @click="clickIT">chang data</Button>
-      </Col>
-    </div>
-    <div>
-      <Table border :height="400" :columns="tableColumns" :data="tableData"></Table>
-    </div>
+    <EasyScrollbar>
+      <div style="width:1800px;">
+        <Table border :height="400" :columns="tableColumns" :data="tableData"></Table>
+      </div>
+    </EasyScrollbar>
+    
   </Row>
 </template>
 <script>
 export default {
   data() {
     return {
-      model13: 'hkfdhsk',
-      loading1: false,
-      options1: [],
-
-      model14: [],
       mulLabel: [],
-      loading2: false,
-      options2: [],
-      list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'],
-      list2: [{
-        label: 123,
-        value: 'lala'
-      },
-      {
-        label: 456,
-        value: 'bobo'
-      }],
-      doubleList: [{
-        name: 123,
-        value: 'nana'
-      },
-      {
-        name: 123456,
-        value: 'kakak'
-      }],
       tableColumns: this.tableColumnsFun(),
       tableData: [{
         id: '第一条数据',
@@ -97,61 +32,8 @@ export default {
     }
   },
   mounted() {
-    this.queryName();
-    // this.query();
   },
   methods: {
-    clickIT() {
-      this.doubleList = [{
-        name: 123,
-        value: 'nana'
-      },
-      {
-        name: 123456,
-        value: 'kakak'
-      }, {
-        name: 123,
-        value: 'nana'
-      },
-      {
-        name: 123456,
-        value: 'kakak'
-      }]
-    },
-    queryName() {
-      setTimeout(() => {
-        this.model14 = ['Alabama', 'Arkansas', 'Connecticut'];
-        this.mulLabel = ['Alabama', 'Arkansas', 'Connecticut'];
-      }, 1000);
-    },
-    remoteMethod1(query) {
-      if (query !== '') {
-        this.loading1 = true;
-        setTimeout(() => {
-          this.loading1 = false;
-          this.options1 = this.list2
-        }, 200);
-      } else {
-        this.options1 = [];
-      }
-    },
-    remoteMethod2(query) {
-      if (query !== '') {
-        this.loading2 = true;
-        setTimeout(() => {
-          this.loading2 = false;
-          const list = this.list.map(item => {
-            return {
-              value: item,
-              label: item
-            };
-          });
-          this.options2 = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
-        }, 200);
-      } else {
-        this.options2 = [];
-      }
-    },
     tableColumnsFun() {
       return [
         {
