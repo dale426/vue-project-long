@@ -1,14 +1,19 @@
 <template>
-  <Row class="wrap">
+  <Row class="wrap" style="width:400px;">
     <EasyScrollbar>
       <div style="width:1800px;">
-        <Table border :height="400" :columns="tableColumns" :data="tableData"></Table>
+        <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
       </div>
     </EasyScrollbar>
-    
+    <div>
+        <LongScroll>
+            <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
+        </LongScroll>
+    </div>
   </Row>
 </template>
 <script>
+import LongScroll from './LongScroll.vue'
 export default {
   data() {
     return {
@@ -31,7 +36,13 @@ export default {
 
     }
   },
+  components: {
+    LongScroll
+  },
   mounted() {
+    window.onresize = () => {
+
+    }
   },
   methods: {
     tableColumnsFun() {

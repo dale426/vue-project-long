@@ -54,6 +54,8 @@ export default {
   },
   render(h) {
     let gutter = scrollbarWidth();
+    console.log('gutter', gutter);
+    
     let style = this.wrapStyle;
     let barStyle = {color:this.opt.barColor,width: this.opt.barWidth + "px",barOpacityMin:this.opt.barOpacityMin};
     let railStyle = {zIndex:this.opt.zIndex,color:this.opt.railColor,marginRight:this.opt.barMarginRight +"px",marginBottom:this.opt.barMaginBottom +"px"};
