@@ -1,10 +1,11 @@
 <template>
-  <Row class="wrap" style="width:400px;">
+  <Row class="wrap" style="width:600px;">
     <EasyScrollbar>
-      <div style="width:1800px;">
+      <div style="width:1200px;">
         <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
       </div>
     </EasyScrollbar>
+    <p>------------------</p>
     <div>
         <LongScroll>
             <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
