@@ -1,7 +1,7 @@
 <template>
-  <Row class="wrap" style="width:600px;">
+  <Row class="wrap" style="width:1000px;">
     <EasyScrollbar>
-      <div style="width:1200px;">
+      <div style="width:1800px;">
         <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
       </div>
     </EasyScrollbar>
