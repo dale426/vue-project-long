@@ -1,5 +1,5 @@
 <template>
-  <Row class="wrap" style="width:1000px;">
+  <Row class="wrap" style="width:960px;">
     <EasyScrollbar>
       <div style="width:1800px;">
         <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
@@ -8,7 +8,7 @@
     <p>------------------</p>
     <div>
         <LongScroll>
-            <Table border :height="200" :columns="tableColumns" :data="tableData"></Table>
+            <Table style="width:2700px;" border :height="200" :columns="tableColumns" :data="tableData"></Table>
         </LongScroll>
     </div>
   </Row>
