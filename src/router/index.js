@@ -66,6 +66,16 @@ export default new Router({
                     path: '/hljs/class',
                     name: 'class',
                     component: r => require.ensure([], () => r(require('../module/hljs/class.vue')), 'class')
+                }, {
+                    // vue父子组件传值
+                    path: '/drug',
+                    name: 'drug',
+                    component: r => require.ensure([], () => r(require('../module/drug/index.vue')), 'drug')
+                }, {
+                    // vue父子组件传值
+                    path: '/drug/mobile',
+                    name: 'drugMobile',
+                    component: r => require.ensure([], () => r(require('../module/drug/mobile.vue')), 'drugMobile')
                 }
             
             
