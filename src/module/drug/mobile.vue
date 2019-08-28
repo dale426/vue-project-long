@@ -1,15 +1,19 @@
 <template>
     <div class="pg-mobile-move">
-        <div v-for="item in list" :key="item.id" :style="{background: item.color, height: '100px'}">
+        <div
+            v-for="(item, index) in list"
+            :key="item.id"
+            :style="{background: item.color, height: '100px'}"
+        >
             <img
                 :move="true"
                 class="box"
-                :data-key="item.id"
+                :data-key="index"
                 :src="item.url"
                 alt
                 @touchstart="touchstart"
                 @touchmove="touchmove"
-				@touchend="touchend($event, item.id)"
+                @touchend="touchend($event, index)"
                 @click="handlerClick"
             />
             {{item.content}}
@@ -60,10 +64,10 @@ export default {
         this.queryDomList()
     },
     methods: {
-        async queryDomList() {
-            let domList = await this.getElementByAttr('img', 'move');
+        queryDomList() {
+            let domList = this.getElementByAttr('img', 'move');
             for (let key in domList) {
-				let element = domList[key].getBoundingClientRect();
+                let element = domList[key].getBoundingClientRect();
 
                 this.posList[key] = {
                     minX: element.left - (element.width) / 2,
@@ -130,24 +134,26 @@ export default {
             this.checkPos('move', tar);
         },
         touchend(e, soureEl) {
-			console.log('e', e);
-			// 松开时 当前位置
-			let nowX = e.target.x + this.moveX;
-			let nowY = e.target.y + this.moveY;
-			console.log('nowX, nowY', nowX, nowY);
-			
-			// 判断进入了哪个目标区域
-			for (let key in this.posList) {
-				if (nowX < this.posList[key].maxX 
-				&& nowX > this.posList[key].minX
-				&& nowY < this.posList[key].maxY
-				&& nowY > this.posList[key].minY
-				) {
-					console.log('key', key);
-					break;
-				}
-			}
+            console.log('e', e);
+            // 松开时 当前位置
+            let nowX = e.target.x + this.moveX;
+            let nowY = e.target.y + this.moveY;
+            console.log('nowX, nowY', nowX, nowY);
 
+            // 判断进入了哪个目标区域
+            for (let key in this.posList) {
+                if (nowX < this.posList[key].maxX
+                    && nowX > this.posList[key].minX
+                    && nowY < this.posList[key].maxY
+                    && nowY > this.posList[key].minY
+                ) {
+                    console.log('key', key);
+                    this.list.splice(soureEl, 1, ...this.list.splice(key, 1, this.list[soureEl]));
+                    break;
+                }
+            }
+            e.target.style.cssText = '';
+            console.log('this.list', this.list);
 
             //目标区域的视觉变化
             // this.tarEle.style.cssText = "opacity: .5;"
@@ -187,9 +193,9 @@ export default {
 .pg-mobile-move {
     display: block;
     overflow: hidden;
-	border: 2px solid red;
-	margin-top: 100px;
-	position: relative;
+    border: 2px solid red;
+    margin-top: 100px;
+    position: relative;
 }
 .box {
     display: inline-block;
