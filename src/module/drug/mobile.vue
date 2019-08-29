@@ -5,17 +5,16 @@
             :key="item.id"
             :style="{background: item.color, height: '100px'}"
         >
-            <img
+            <div
+                @click="handlerClick"
                 :move="true"
                 class="box"
                 :data-key="index"
-                :src="item.url"
-                alt
+                :style="{'background-image': `url(${item.url})`}"
                 @touchstart="touchstart"
                 @touchmove="touchmove"
                 @touchend="touchend($event, index)"
-                @click="handlerClick"
-            />
+            ></div>
             {{item.content}}
         </div>
     </div>
@@ -29,7 +28,14 @@
  * 2. 拖动时判断 元素的位置 落入哪个目标区域， end时 重新渲染数据
  * 
 */
+// 获取滚动条高度
+// For scrollX
+// (((t = document.documentElement) || (t = document.body.parentNode))
+//     && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft
 
+// // For scrollY
+//     (((t = document.documentElement) || (t = document.body.parentNode))
+//         && typeof t.scrollTop == 'number' ? t : document.body).scrollTop
 
 export default {
     name: 'mobile',
@@ -41,39 +47,71 @@ export default {
                 content: '这是第一个',
                 url: 'http://img.souche.com/f2e/145868b5bd3e5828706cd7e3998d0abc.jpg'
             }, {
+                id: 'aa1',
+                color: 'lightyellow',
+                content: '这是第2个',
+                url: 'http://img.souche.com/f2e/145868b5bd3e5828706cd7e3998d0abc.jpg'
+            }, {
+                id: 'aa2',
+                color: 'red',
+                content: '这是第3个',
+                url: 'http://img.souche.com/f2e/145868b5bd3e5828706cd7e3998d0abc.jpg'
+            }, {
+                id: 'aa3',
+                color: '#44cef6',
+                content: '这是第4个',
+                url: 'http://img.souche.com/f2e/145868b5bd3e5828706cd7e3998d0abc.jpg'
+            }, {
                 color: 'lightblue',
                 id: 'bb',
-                content: '这是第2个',
+                content: '这是第5个',
                 url: 'http://img.souche.com/f2e/fd1386859f281b07ab66b77ea547e188.png'
             }, {
                 id: 'cc',
                 color: 'green',
-                content: '这是第3个',
+                content: '这是第6个',
                 url: 'http://img.souche.com/f2e/725010505271b56446bcffcfcb1efd9f.jpeg'
             }, {
                 id: 'dd',
                 color: 'orange',
-                content: '这是第4个',
+                content: '这是第7个',
+                url: 'http://img.souche.com/f2e/684bcbff9b2c9c7fcd86f7676674914f.jpeg'
+            }, {
+                id: 'ee',
+                color: '#ff4777',
+                content: '这是第8个',
+                url: 'http://img.souche.com/f2e/684bcbff9b2c9c7fcd86f7676674914f.jpeg'
+            }, {
+                id: 'ff',
+                color: '#21a675',
+                content: '这是第9个',
                 url: 'http://img.souche.com/f2e/684bcbff9b2c9c7fcd86f7676674914f.jpeg'
             }],
             domList: [],
-            posList: []
+            posList: [],
+            delayTimer: null, // 延时器
+            canMove: false,
         }
     },
     mounted() {
-        this.queryDomList()
+        this.queryDomList();
+        document.addEventListener("touchstart", function (ev) {
+            // ev.preventDefault();
+        });
     },
     methods: {
         queryDomList() {
-            let domList = this.getElementByAttr('img', 'move');
+            let domList = this.getElementByAttr('div', 'move');
             for (let key in domList) {
                 let element = domList[key].getBoundingClientRect();
-
+                let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
                 this.posList[key] = {
-                    minX: element.left - (element.width) / 2,
-                    maxX: element.left + (element.width) / 2,
-                    minY: element.top - (element.height) / 2,
-                    maxY: element.top + (element.height) / 2,
+                    top: element.top + scrollTop,
+                    left: element.left,
+                    minX: element.left - (element.width) / 4,
+                    maxX: element.left + (element.width) / 4,
+                    minY: element.top - (element.height) / 4 + scrollTop,
+                    maxY: element.top + (element.height) / 4 + scrollTop,
                 }
             }
             console.log('posList', this.posList);
@@ -97,12 +135,16 @@ export default {
 
         },
         touchstart(e) {
-            e.preventDefault();
-            e.stopPropagation();
+            // e.preventDefault();   // 阻止默认行为
+            e.stopPropagation();  // 阻止冒泡
+
             var tar = e.target;
-            //执行定义在拖动开始时须执行的函数， 参数为即将拖动的元素
-            // this.opts.onStart(tar);
-            this.onStart(tar);
+            // this.onStart(e);
+            this.canMove = false;
+            this.delayTimer ? window.clearTimeout(this.delayTimer) : null;
+            this.delayTimer = setTimeout(() => {
+                this.canMove = true;
+            }, 1000);
             //初始化拖动元素的位置信息；
             this.dragT = tar.offsetTop;
             this.dragL = tar.offsetLeft;
@@ -115,6 +157,10 @@ export default {
             this.moveX = this.moveY = 0;
         },
         touchmove(e) {
+
+            if (!this.canMove) {
+                return window.clearTimeout(this.delayTimer);
+            }
             var tar = e.target;
             this.onMove(tar);
             this.nowX = e.pageX || e.touches[0].pageX;
@@ -134,11 +180,19 @@ export default {
             this.checkPos('move', tar);
         },
         touchend(e, soureEl) {
-            console.log('e', e);
+            if (!this.canMove) {
+                return false;
+            }
+            let targetInfo = e.target.getBoundingClientRect()
+            let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+
             // 松开时 当前位置
-            let nowX = e.target.x + this.moveX;
-            let nowY = e.target.y + this.moveY;
-            console.log('nowX, nowY', nowX, nowY);
+            let nowX = targetInfo.left;
+            let nowY = targetInfo.top + scrollTop;
+
+            console.log('targetInfo.top', targetInfo.top, targetInfo.top + scrollTop);
+
+            // console.log('nowX, nowY', nowX, nowY, this.moveX, this.moveY);
 
             // 判断进入了哪个目标区域
             for (let key in this.posList) {
@@ -152,15 +206,13 @@ export default {
                     break;
                 }
             }
-            e.target.style.cssText = '';
+            // e.target.style.cssText = '';
+            let targetStyle = e.target.style.cssText
+            e.target.style.cssText = targetStyle.split('position')[0] || '';
             console.log('this.list', this.list);
+            this.delayTimer ? window.clearTimeout(this.delayTimer) : null
+            this.canMove = false;
 
-            //目标区域的视觉变化
-            // this.tarEle.style.cssText = "opacity: .5;"
-            //检测最终位置
-            // this.checkPos('end', e.target);
-
-            // 判断是否进入一个正确的目标区域
 
         },
         // 移动元素
@@ -174,11 +226,11 @@ export default {
             e.style.cssText += 'position: absolute;-webkit-transform: translate(' + x + 'px,' + y + 'px);';
         },
         // 开始移动调用
-        onStart() {
+        onStart(e) {
+
         },
         // 开始移动时
         onMove(e) {
-
 
         },
         // 检测是否落入目标区域
@@ -203,5 +255,6 @@ export default {
     height: 100px;
     text-shadow: 1px 1px 0 white;
     font-size: 20px;
+    background-size: cover;
 }
 </style>
