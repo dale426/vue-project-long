@@ -95,9 +95,6 @@ export default {
     },
     mounted() {
         this.queryDomList();
-        document.addEventListener("touchstart", function (ev) {
-            // ev.preventDefault();
-        });
     },
     methods: {
         queryDomList() {
@@ -144,7 +141,9 @@ export default {
             this.delayTimer ? window.clearTimeout(this.delayTimer) : null;
             this.delayTimer = setTimeout(() => {
                 this.canMove = true;
-            }, 1000);
+                // 控制滚动条
+
+            }, 400);
             //初始化拖动元素的位置信息；
             this.dragT = tar.offsetTop;
             this.dragL = tar.offsetLeft;
@@ -161,7 +160,8 @@ export default {
             if (!this.canMove) {
                 return window.clearTimeout(this.delayTimer);
             }
-            var tar = e.target;
+            e.preventDefault(); // 开始移动后禁止滚动， 判断距离通过js移动滚动条
+            let tar = e.target;
             this.onMove(tar);
             this.nowX = e.pageX || e.touches[0].pageX;
             this.nowY = e.pageY || e.touches[0].pageY;
@@ -206,15 +206,15 @@ export default {
                     break;
                 }
             }
-            // e.target.style.cssText = '';
+            // 清除拖动时的样式
             let targetStyle = e.target.style.cssText
             e.target.style.cssText = targetStyle.split('position')[0] || '';
             console.log('this.list', this.list);
             this.delayTimer ? window.clearTimeout(this.delayTimer) : null
             this.canMove = false;
 
-
         },
+
         // 移动元素
         setMove(e, type) {
             var x = this.moveX || 0,
@@ -231,7 +231,13 @@ export default {
         },
         // 开始移动时
         onMove(e) {
+            if (e.getBoundingClientRect().top <= 30) {
+                document.body.scrollTop = document.body.scrollTop >= 4 ? document.body.scrollTop - 4 : 0
 
+            } else if (window.screen.availHeight - e.getBoundingClientRect().bottom <= 150) {
+
+                document.body.scrollTop = document.body.scrollTop + 4
+            }
         },
         // 检测是否落入目标区域
         checkPos() {
