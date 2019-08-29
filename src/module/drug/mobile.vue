@@ -24,18 +24,37 @@
 
 /**  
  * 思路
- * 1. 初始化记录所有可移动元素的位置  --- 直接将dom存储在数组中
- * 2. 拖动时判断 元素的位置 落入哪个目标区域， end时 重新渲染数据
  * 
+ * 一、初始化记录所有可移动元素的位置  --- 直接将dom存储在数组中
+ * 1 计算出每个可移动DOM的位置存储
+ * 
+ * 二、拖动时判断
+ * 1 定时模拟长按效果
+ * 2 拖动时通过 touchmove 动态修改 当前元素的样式， 实现跟随效果
+ * 
+ * 三、松开手指时 touchend
+ * 1 松开时获取当前松开的位置
+ * 2 判断该位置落入哪个可以交换顺序的DOM中
+ * 3 回传拖动的DOM 和 落入的DOM的key 以交换两个数据
 */
-// 获取滚动条高度
-// For scrollX
-// (((t = document.documentElement) || (t = document.body.parentNode))
-//     && typeof t.scrollLeft == 'number' ? t : document.body).scrollLeft
 
-// // For scrollY
-//     (((t = document.documentElement) || (t = document.body.parentNode))
-//         && typeof t.scrollTop == 'number' ? t : document.body).scrollTop
+/**
+ * 获取滚动条高度
+ * ==> PC 
+ * document.documentElement.scrollTop
+ * ===> mobile
+ * document.body).scrollTop
+ */
+
+/** 
+ * method -> getBoundingClientRect 获取DOM相对视口的位置, 返回位置信息对象
+ * top:    dom顶部距离视口 -顶部- 的距离
+ * bottom: dom底部距离视口 -顶部- 的距离
+ * left:   dom左边距离视口 -左边- 的距离
+ * right:  dom右边距离视口 -左边- 的距离
+ * width:  元素的宽度
+ * height: 元素的高度
+ */
 
 export default {
     name: 'mobile',
@@ -136,14 +155,8 @@ export default {
             e.stopPropagation();  // 阻止冒泡
 
             var tar = e.target;
-            // this.onStart(e);
-            this.canMove = false;
-            this.delayTimer ? window.clearTimeout(this.delayTimer) : null;
-            this.delayTimer = setTimeout(() => {
-                this.canMove = true;
-                // 控制滚动条
+            this.onStart(e);
 
-            }, 400);
             //初始化拖动元素的位置信息；
             this.dragT = tar.offsetTop;
             this.dragL = tar.offsetLeft;
@@ -190,29 +203,18 @@ export default {
             let nowX = targetInfo.left;
             let nowY = targetInfo.top + scrollTop;
 
-            console.log('targetInfo.top', targetInfo.top, targetInfo.top + scrollTop);
-
-            // console.log('nowX, nowY', nowX, nowY, this.moveX, this.moveY);
-
-            // 判断进入了哪个目标区域
+            // 判断进入了哪个目标区域  soureEl-移动的元素   key- 落入的目标元素
             for (let key in this.posList) {
                 if (nowX < this.posList[key].maxX
                     && nowX > this.posList[key].minX
                     && nowY < this.posList[key].maxY
                     && nowY > this.posList[key].minY
                 ) {
-                    console.log('key', key);
                     this.list.splice(soureEl, 1, ...this.list.splice(key, 1, this.list[soureEl]));
                     break;
                 }
             }
-            // 清除拖动时的样式
-            let targetStyle = e.target.style.cssText
-            e.target.style.cssText = targetStyle.split('position')[0] || '';
-            console.log('this.list', this.list);
-            this.delayTimer ? window.clearTimeout(this.delayTimer) : null
-            this.canMove = false;
-
+            this.onEnd(e)
         },
 
         // 移动元素
@@ -225,11 +227,16 @@ export default {
             }
             e.style.cssText += 'position: absolute;-webkit-transform: translate(' + x + 'px,' + y + 'px);';
         },
-        // 开始移动调用
+        // touchstart时调用
         onStart(e) {
-
+            // 长按时间控制
+            this.canMove = false;
+            this.delayTimer ? window.clearTimeout(this.delayTimer) : null;
+            this.delayTimer = setTimeout(() => {
+                this.canMove = true;
+            }, 400);
         },
-        // 开始移动时
+        // touchmove 开始移动时
         onMove(e) {
             if (e.getBoundingClientRect().top <= 30) {
                 document.body.scrollTop = document.body.scrollTop >= 4 ? document.body.scrollTop - 4 : 0
@@ -238,6 +245,13 @@ export default {
 
                 document.body.scrollTop = document.body.scrollTop + 4
             }
+        },
+        onEnd(e) {
+            // 清除拖动时的样式
+            let targetStyle = e.target.style.cssText
+            e.target.style.cssText = targetStyle.split('position')[0] || '';
+            this.delayTimer ? window.clearTimeout(this.delayTimer) : null
+            this.canMove = false;
         },
         // 检测是否落入目标区域
         checkPos() {
