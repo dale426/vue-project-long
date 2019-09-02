@@ -3,7 +3,7 @@
         <div
             v-for="(item, index) in list"
             :key="item.id"
-            :style="{background: item.color, height: '100px'}"
+            :style="{background: item.color, height: '140px',width: '100px', display: 'inline-block'}"
         >
             <div
                 @click="handlerClick"
@@ -43,7 +43,7 @@
  * ==> PC 
  * document.documentElement.scrollTop
  * ===> mobile
- * document.body).scrollTop
+ * document.body.scrollTop
  */
 
 /** 
@@ -134,12 +134,12 @@ export default {
 
         },
         getElementByAttr(tag, dataAttr) {
-            var aElements = document.getElementsByTagName(tag);
-            var aEle = [];
-            for (var i = 0; i < aElements.length; i++) {
-                var ele = aElements[i].getAttribute(dataAttr);
-                var key = aElements[i].getAttribute('data-key');
+            let aElements = document.getElementsByTagName(tag);
+            let aEle = [];
+            for (let i = 0; i < aElements.length; i++) {
+                let ele = aElements[i].getAttribute(dataAttr);
                 if (ele === 'true') {
+                    let key = aElements[i].getAttribute('data-key');
                     if (aEle[key]) throw new Error('图片的key不能重复');
                     aEle[key] = aElements[i];
                 }
@@ -154,7 +154,7 @@ export default {
             // e.preventDefault();   // 阻止默认行为
             e.stopPropagation();  // 阻止冒泡
 
-            var tar = e.target;
+            let tar = e.target;
             this.onStart(e);
 
             //初始化拖动元素的位置信息；
@@ -219,13 +219,14 @@ export default {
 
         // 移动元素
         setMove(e, type) {
-            var x = this.moveX || 0,
+            let x = this.moveX || 0,
                 y = this.moveY || 0;
             if (type === 'reset') {
                 e.style.cssText = '';
                 return;
             }
-            e.style.cssText += 'position: absolute;-webkit-transform: translate(' + x + 'px,' + y + 'px);';
+            // e.style.cssText += 'position: absolute;-webkit-transform: translate(' + x + 'px,' + y + 'px);';
+            e.style.cssText += '-webkit-transform: translate(' + x + 'px,' + y + 'px);';
         },
         // touchstart时调用
         onStart(e) {
@@ -234,7 +235,7 @@ export default {
             this.delayTimer ? window.clearTimeout(this.delayTimer) : null;
             this.delayTimer = setTimeout(() => {
                 this.canMove = true;
-            }, 400);
+            }, 100);
         },
         // touchmove 开始移动时
         onMove(e) {
@@ -249,7 +250,7 @@ export default {
         onEnd(e) {
             // 清除拖动时的样式
             let targetStyle = e.target.style.cssText
-            e.target.style.cssText = targetStyle.split('position')[0] || '';
+            e.target.style.cssText = targetStyle.split('transform')[0] || '';
             this.delayTimer ? window.clearTimeout(this.delayTimer) : null
             this.canMove = false;
         },
@@ -268,6 +269,7 @@ export default {
     border: 2px solid red;
     margin-top: 100px;
     position: relative;
+    width: 400px;
 }
 .box {
     display: inline-block;
