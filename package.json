@@ -16,6 +16,7 @@
     "ag-grid-vue": "11.0.x",
     "axios-jsonp": "^1.0.1",
     "highlight.js": "^9.13.1",
+    "lonts": "^0.1.1",
     "vue": "^2.3.3",
     "vue-router": "^2.6.0"
   },

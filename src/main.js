@@ -20,6 +20,8 @@ import './style/ag-grid/ag-theme-balham.css'
 // import '../node_modules/ag-grid/dist/styles/theme-fresh.css'
 // import '../node_modules/ag-grid/dist/styles/ag-theme-balham.css'
 var _ = require('lodash')
+import lonts from 'lonts'
+console.log('lonts', lonts);
 
 import hljs from 'highlight.js';
 // import hljs from 'highlight.js/lib/highlight';
