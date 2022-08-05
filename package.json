@@ -71,7 +71,7 @@
     "mockjs": "^1.0.1-beta3",
     "moment": "^2.22.1",
     "mongodb": "^3.0.4",
-    "mongoose": "^5.0.14",
+    "mongoose": "^5.7.5",
     "nightwatch": "^0.9.12",
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
